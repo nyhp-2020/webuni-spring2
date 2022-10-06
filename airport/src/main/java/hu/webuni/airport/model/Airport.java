@@ -44,7 +44,8 @@ public class Airport {
 	
 	@OneToMany(mappedBy = "takeoff"/*, fetch = FetchType.EAGER*/)
 //	@Fetch(FetchMode.SUBSELECT)
-	private List<Flight> departures;
+	private Set<Flight> departures;
+//	private List<Flight> departures;
 	
 	@OneToMany(mappedBy = "landing")
 	private Set<Flight> arrivals;
