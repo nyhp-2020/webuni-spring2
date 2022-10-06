@@ -2,6 +2,7 @@ package hu.webuni.airport.web;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.model.Airport;
+import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.service.AirportService;
 import lombok.RequiredArgsConstructor;
 
@@ -29,13 +32,21 @@ import lombok.RequiredArgsConstructor;
 public class AirportController {
 
 	private final AirportService airportService;
+	private final AirportRepository airportRepository;
 	
 	private final AirportMapper airportMapper;
 	
 	
 	@GetMapping
-	public List<AirportDto> getAll(){
-		return airportMapper.airportsToDtos(airportService.findAll());
+	public List<AirportDto> getAll(@RequestParam Optional<Boolean> full){
+		boolean isFull = full.orElse(false);
+//		List<Airport> airports = airportService.findAll();
+		List<Airport> airports = isFull 
+				? airportRepository.findAllWithAddress()
+				: airportRepository.findAll();
+		return isFull
+				? airportMapper.airportsToDtos(airports)
+				: airportMapper.airportSummariesToDtos(airports);
 	}
 	
 	@GetMapping("/{id}")

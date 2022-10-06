@@ -24,6 +24,7 @@ public class AirportApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		initDbService.deleteDB();
 		initDbService.addInitData();
 	}
 

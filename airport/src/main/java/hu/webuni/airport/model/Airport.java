@@ -1,6 +1,7 @@
 package hu.webuni.airport.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -31,7 +32,7 @@ public class Airport {
 	private String name;
 	private String iata;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Address address;
 	
 	public Airport(String name, String iata) {

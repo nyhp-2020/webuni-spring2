@@ -27,7 +27,13 @@ public class AirportControllerIT {
 	void testThatCreatedAirportIsListed() throws Exception {
 		List<AirportDto> airportsBefore = getAllAirports();
 		
-		AirportDto newAirport = new AirportDto(5, "faasffgaf", "IGH");
+		AirportDto newAirport =AirportDto.builder()
+				.id(5)
+				.name("faasffgaf")
+				.iata("IGH")
+				.build();
+				
+//				new AirportDto(5, "faasffgaf", "IGH");
 		
 		AirportDto savedAirport = createAirport(newAirport);
 		newAirport.setId(savedAirport.getId());
