@@ -25,6 +25,7 @@ public interface AirportMapper {
 	@Named("summary")
 	@Mapping(target = "address", ignore = true)
 	@Mapping(target = "departures", ignore = true)
+	@Mapping(target = "arrivals", ignore = true)
 	AirportDto airportSummaryToDto(Airport airport);
 
 	Airport dtoToAirport(AirportDto airportDto);

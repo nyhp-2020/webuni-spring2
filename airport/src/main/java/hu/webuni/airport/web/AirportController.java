@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,12 +40,14 @@ public class AirportController {
 	
 	
 	@GetMapping
-	public List<AirportDto> getAll(@RequestParam Optional<Boolean> full){
+	public List<AirportDto> getAll(@RequestParam Optional<Boolean> full,
+			@SortDefault("id") Pageable pageable){
 		boolean isFull = full.orElse(false);
 //		List<Airport> airports = airportService.findAll();
 		List<Airport> airports = isFull 
-				? airportRepository.findAllWithAddressAndDepartures()
-				: airportRepository.findAll();
+				? airportService.findAllWithRelationships(pageable)
+//				? airportRepository.findAllWithAddressAndDepartures() --> N*M sor jön vissza, ha N arrival és M departure van
+				: airportRepository.findAll(pageable).getContent();
 		return isFull
 				? airportMapper.airportsToDtos(airports)
 				: airportMapper.airportSummariesToDtos(airports);

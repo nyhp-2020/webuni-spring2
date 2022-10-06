@@ -1,6 +1,7 @@
 package hu.webuni.airport.model;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,6 +45,9 @@ public class Airport {
 	@OneToMany(mappedBy = "takeoff"/*, fetch = FetchType.EAGER*/)
 //	@Fetch(FetchMode.SUBSELECT)
 	private List<Flight> departures;
+	
+	@OneToMany(mappedBy = "landing")
+	private Set<Flight> arrivals;
 	
 	public Airport(String name, String iata) {
 		this.name = name;
