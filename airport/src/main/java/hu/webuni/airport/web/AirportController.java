@@ -42,7 +42,7 @@ public class AirportController {
 		boolean isFull = full.orElse(false);
 //		List<Airport> airports = airportService.findAll();
 		List<Airport> airports = isFull 
-				? airportRepository.findAllWithAddress()
+				? airportRepository.findAllWithAddressAndDepartures()
 				: airportRepository.findAll();
 		return isFull
 				? airportMapper.airportsToDtos(airports)
