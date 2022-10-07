@@ -22,7 +22,7 @@ public interface AirportRepository extends JpaRepository<Airport, Long>{
 //	@Query("SELECT a FROM Airport a LEFT JOIN FETC a.address")
 //	List<Airport> findAllWithAddress();
 	
-	@EntityGraph(attributePaths = {"address","arrivals"})
+	@EntityGraph(attributePaths = {"arrivals"})
 	@Query("SELECT a FROM Airport a")
 	List<Airport> findAllWithArrivals(Pageable pageable);
 	
