@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,10 +31,10 @@ public class Course {
 	
 	private String name;
 	
-	@ManyToMany
+	@OneToMany(mappedBy = "course")
 	private Set<Student> students;
 	
-	@ManyToMany
+	@OneToMany(mappedBy = "course")
 	private Set<Teacher> teachers;
 
 }

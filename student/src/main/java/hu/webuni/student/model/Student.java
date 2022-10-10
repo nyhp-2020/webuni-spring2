@@ -32,6 +32,6 @@ public class Student {
 	private LocalDate birthdate;
 	private int semester;
 
-//	@OneToMany
-//	private Set<Course> courses;
+//	@ManyToOne
+//	private Course course;
 }
