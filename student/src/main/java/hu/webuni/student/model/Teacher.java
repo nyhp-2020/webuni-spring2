@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class Teacher {
 	private String name;
 	private LocalDate birthdate;
 	
-//	@ManyToOne	
-//	private Course course;
+	@ManyToOne	
+	private Course course;
 
 }

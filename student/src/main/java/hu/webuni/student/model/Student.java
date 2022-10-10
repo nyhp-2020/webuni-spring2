@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,6 @@ public class Student {
 	private LocalDate birthdate;
 	private int semester;
 
-//	@ManyToOne
-//	private Course course;
+	@ManyToOne
+	private Course course;
 }
