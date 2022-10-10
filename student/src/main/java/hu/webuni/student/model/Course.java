@@ -1,10 +1,12 @@
 package hu.webuni.student.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +29,11 @@ public class Course {
 	private long id;
 	
 	private String name;
+	
+	@ManyToMany
+	private Set<Student> students;
+	
+	@ManyToMany
+	private Set<Teacher> teachers;
 
 }

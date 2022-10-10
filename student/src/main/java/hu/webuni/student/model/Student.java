@@ -1,6 +1,7 @@
 package hu.webuni.student.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,4 +32,6 @@ public class Student {
 	private LocalDate birthdate;
 	private int semester;
 
+//	@OneToMany
+//	private Set<Course> courses;
 }

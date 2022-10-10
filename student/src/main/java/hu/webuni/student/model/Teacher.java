@@ -29,5 +29,8 @@ public class Teacher {
 	
 	private String name;
 	private LocalDate birthdate;
+	
+//	@OneToMany	
+//	private Set<Course> courses;
 
 }
