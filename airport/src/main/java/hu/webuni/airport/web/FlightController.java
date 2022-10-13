@@ -5,7 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,4 +47,16 @@ public class FlightController {
 	public List<FlightDto> searchFlights2(@QuerydslPredicate(root = Flight.class) Predicate predicate){
 		return flightMapper.flightsToDtos(flightRepository.findAll(predicate));
 	}
+	
+	@PostMapping("/{flightId}/pollDelay/{rate}")
+	public void startDelayPolling(@PathVariable long flightId,@PathVariable long rate) {
+		flightService.startDelayPollingForFlight(flightId, rate);
+	}
+	
+	@DeleteMapping("/{flightId}/pollDelay")
+	public void startDelayPolling(@PathVariable long flightId) {
+		flightService.stopDelayPollingForFlight(flightId);
+	}
+	
+
 }
