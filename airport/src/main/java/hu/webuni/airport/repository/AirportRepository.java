@@ -3,8 +3,8 @@ package hu.webuni.airport.repository;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -36,5 +36,6 @@ public interface AirportRepository extends JpaRepository<Airport, Long>{
 	
 	@EntityGraph(attributePaths = {"departures"})
 	@Query("SELECT a FROM Airport a WHERE a.id IN :ids")
-	List<Airport> findByIdWithDepartures(List<Long> ids);
+//	List<Airport> findByIdWithDepartures(List<Long> ids);
+	List<Airport> findByIdWithDepartures(List<Long> ids, Sort sort);
 }

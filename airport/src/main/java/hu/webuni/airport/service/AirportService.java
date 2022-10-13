@@ -67,7 +67,9 @@ public class AirportService {
 		List<Long> arportIds = airports.stream().map(Airport::getId).toList();
 		
 		airports = airportRepository.findByIdWithArrivals(arportIds);
-		airports = airportRepository.findByIdWithDepartures(arportIds);
+//		airports = airportRepository.findByIdWithDepartures(arportIds);
+		
+		airports = airportRepository.findByIdWithDepartures(arportIds, pageable.getSort());
 		
 		return airports;
 	}
