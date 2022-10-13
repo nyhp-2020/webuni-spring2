@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.webuni.airport.aspect.LogCall;
 import hu.webuni.airport.model.Address;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
@@ -23,6 +24,7 @@ public class InitDbService {
 	private final FlightRepository flightRepository;
 	
 	@Transactional
+	@LogCall
 	public void deleteDB(){
 		flightRepository.deleteAll();
 		airportRepository.deleteAll();
