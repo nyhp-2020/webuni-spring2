@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -45,8 +46,8 @@ public class QueryDslWithEntityGraphRepositoryImpl extends
 //	}
 
 	@Override
-	public List<Course> findAll(Predicate predicate, String entityGraphName, EntityGraph.EntityGraphType egType) {
-		JPAQuery query =querydsl.createQuery(path).where(predicate);
+	public List<Course> findAll(Predicate predicate, String entityGraphName, EntityGraph.EntityGraphType egType, Sort sort) {
+		JPAQuery query =(JPAQuery) querydsl.applySorting(sort, querydsl.createQuery(path).where(predicate));
 		query.setHint(egType.getKey(), em.getEntityGraph(entityGraphName));
 		return query.fetch();
 	}

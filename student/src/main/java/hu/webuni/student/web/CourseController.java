@@ -3,7 +3,9 @@ package hu.webuni.student.web;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,10 +37,12 @@ public class CourseController {
 	}
 	
 	@GetMapping("/search")
-	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate,@RequestParam Optional<Boolean> full){
+	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate,@RequestParam Optional<Boolean> full,@SortDefault("id") Pageable pageable){
 //		Iterable<Course> result = courseRepository.findAll(predicate);
-		Iterable<Course> result = courseService.searchCourses(predicate);
-		if(full.isEmpty() || !full.get()) {
+		boolean isSummaryNeeded = full.isEmpty() || !full.get();
+		Iterable<Course> result = isSummaryNeeded ? courseRepository.findAll(predicate, pageable) : courseService.searchCourses(predicate,pageable);
+
+		if(isSummaryNeeded) {
 			return courseMapper.courseSummariesToDtos(result);
 		} else
 			return courseMapper.coursesToDtos(result);
