@@ -1,12 +1,14 @@
 package hu.webuni.student.web;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.querydsl.core.types.Predicate;
@@ -33,8 +35,12 @@ public class CourseController {
 	}
 	
 	@GetMapping("/search")
-	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate){
-//		return courseMapper.coursesToDtos(courseRepository.findAll(predicate));
-		return courseMapper.courseSummariesToDtos(courseRepository.findAll(predicate));
+	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate,@RequestParam Optional<Boolean> full){
+//		Iterable<Course> result = courseRepository.findAll(predicate);
+		Iterable<Course> result = courseService.searchCourses(predicate);
+		if(full.isEmpty() || !full.get()) {
+			return courseMapper.courseSummariesToDtos(result);
+		} else
+			return courseMapper.coursesToDtos(result);
 	}
 }

@@ -3,9 +3,10 @@ package hu.webuni.student.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
+import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.google.common.collect.Lists;
@@ -14,8 +15,6 @@ import com.querydsl.core.types.Predicate;
 
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.QCourse;
-import hu.webuni.student.model.Student;
-import hu.webuni.student.model.Teacher;
 import hu.webuni.student.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +23,13 @@ import lombok.RequiredArgsConstructor;
 public class CourseService {
 	
 	private final CourseRepository courseRepository;
+	
+	@Transactional
+	public List<Course> searchCourses(Predicate predicate){
+		List<Course> courses = courseRepository.findAll(predicate,"Course.students",EntityGraphType.LOAD);
+		courses = courseRepository.findAll(QCourse.course.in(courses),"Course.teachers",EntityGraphType.LOAD);
+		return courses;
+	}
 	
 	public List<Course> findAll(){
 		return courseRepository.findAll();

@@ -12,10 +12,12 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.QCourse;
 
-public interface CourseRepository extends JpaRepository<Course, Long>,
-	JpaSpecificationExecutor<Course>,
+public interface CourseRepository extends
+	JpaRepository<Course, Long>,
+//	JpaSpecificationExecutor<Course>,
 	QuerydslPredicateExecutor<Course>,
-	QuerydslBinderCustomizer<QCourse>{
+	QuerydslBinderCustomizer<QCourse>,
+	QueryDslWithEntityGraphRepository<Course,Long>{
 	
 	@Override
 	default void customize(QuerydslBindings bindings, QCourse course) {
