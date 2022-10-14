@@ -38,7 +38,7 @@ public class InitDbService {
 		Student student1 = Student.builder().name("Kis Pál").birthdate(LocalDate.of(1981, 4, 12)).semester(1).build();
 		Student student2 = Student.builder().name("Ladó Béla").birthdate(LocalDate.of(1992, 3, 15)).semester(2).build();
 		Student student3 = Student.builder().name("Szél Kálmám").birthdate(LocalDate.of(1983, 9, 11)).semester(3).build();
-		Student student4 = Student.builder().name("Arató Dávid").birthdate(LocalDate.of(194, 11, 5)).semester(4).build();
+		Student student4 = Student.builder().name("Arató Dávid").birthdate(LocalDate.of(1984, 11, 5)).semester(4).build();
 		
 //		student1.setCourse(course1);
 //		student2.setCourse(course1);

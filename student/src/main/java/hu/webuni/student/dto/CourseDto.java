@@ -1,12 +1,7 @@
 package hu.webuni.student.dto;
 
-import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.OneToMany;
-
-import hu.webuni.student.model.Student;
-import hu.webuni.student.model.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +18,7 @@ public class CourseDto {
 	private long id;
 	
 	private String name;
-	private Set<StudentDto> students;
-	private Set<TeacherDto> teachers;
+	private List<StudentDto> students;
+	private List<TeacherDto> teachers;
 
 }

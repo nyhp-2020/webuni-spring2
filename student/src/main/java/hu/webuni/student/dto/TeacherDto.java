@@ -19,6 +19,6 @@ public class TeacherDto {
 
 	private String name;
 	private LocalDate birthdate;
-	private CourseDto course;
+//	private CourseDto course;
 
 }

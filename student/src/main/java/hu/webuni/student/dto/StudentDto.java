@@ -21,6 +21,6 @@ public class StudentDto {
 	private String name;
 	private LocalDate birthdate;
 	private int semester;
-	private CourseDto course;
+//	private CourseDto course;
 
 }

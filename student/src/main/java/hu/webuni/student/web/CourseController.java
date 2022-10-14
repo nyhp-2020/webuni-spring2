@@ -34,6 +34,7 @@ public class CourseController {
 	
 	@GetMapping("/search")
 	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate){
-		return courseMapper.coursesToDtos(courseRepository.findAll(predicate));
+//		return courseMapper.coursesToDtos(courseRepository.findAll(predicate));
+		return courseMapper.courseSummariesToDtos(courseRepository.findAll(predicate));
 	}
 }
