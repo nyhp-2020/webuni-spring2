@@ -6,4 +6,6 @@ import hu.webuni.student.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long>{
 
+
+
 }
