@@ -1,1 +1,0 @@
-# webuni-spring-kh-megoldasok-2022_10
