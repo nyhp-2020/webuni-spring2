@@ -65,6 +65,11 @@ public class InitDbService {
 		teacherRepository.save(teacher3);
 		teacherRepository.save(teacher4);
 		
+//		Course course1 = Course.builder()
+//				.name("Matematika")
+//				.students(Set.copyOf(Arrays.asList(student1, student2)))
+//				.teachers(Set.copyOf(Arrays.asList(teacher1, teacher4))).build();
+		
 		Course course1 = new Course(0,"Matematika",Set.copyOf(Arrays.asList(student1, student2)),Set.copyOf(Arrays.asList(teacher1, teacher4)));
 		Course course2 = new Course(0,"Fizika",Set.copyOf(Arrays.asList(student1, student2, student3)),Set.copyOf(Arrays.asList(teacher1, teacher3)));
 		Course course3 = new Course(0,"Kémia",Set.copyOf(Arrays.asList(student4)),Set.copyOf(Arrays.asList(teacher2)));
@@ -79,9 +84,9 @@ public class InitDbService {
 	
 	@Transactional
 	public void deleteDB() {
+		courseRepository.deleteAll();
 		studentRepository.deleteAll();
 		teacherRepository.deleteAll();
-		courseRepository.deleteAll();
 	}	
 	
 

@@ -42,7 +42,7 @@ public class Teacher {
 //	@ManyToOne	
 //	private Course course;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "teachers")
 	private Set<Course> courses;
 
 }

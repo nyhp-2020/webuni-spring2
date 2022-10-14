@@ -112,7 +112,8 @@ public class FlightService {
 
 //	@Transactional --> hosszú tranzakció, mert a getDelay lassú
 //	@Scheduled(cron = "*/15 * * * * *")
-	@Scheduled(cron = "0 0 * * * *")
+//	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(cron = "*/5 * * * * *")
 //	@Async
 	public void updateDelays() {
 		System.out.println("updateDelays called");
