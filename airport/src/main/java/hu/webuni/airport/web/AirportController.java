@@ -1,5 +1,6 @@
 package hu.webuni.airport.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import hu.webuni.airport.dto.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.model.Airport;
+import hu.webuni.airport.model.HistoryData;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.service.AirportService;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +62,31 @@ public class AirportController {
 		
 		return airportMapper.airportSummaryToDto(airport);
 //		return airportMapper.airportToDto(airport);
+	}
+	
+//	@GetMapping("/{id}/history")
+//	public List<AirportDto> getHistoryById(@PathVariable long id) {
+//		List<Airport> airports = airportService.getAirportHistory(id);
+//		
+//		return airportMapper.airportSummariesToDtos(airports);
+//	}
+	
+	@GetMapping("/{id}/history")
+	public List<HistoryData<AirportDto>> getHistoryById(@PathVariable long id) {
+		List<HistoryData<Airport>> airports = airportService.getAirportHistory(id);
+		
+		List<HistoryData<AirportDto>> airportDtosWithHistory = new ArrayList<>();
+		
+		airports.forEach(hd -> {
+			airportDtosWithHistory.add(new HistoryData<>(
+//					airportMapper.airportSummaryToDto(hd.getData()),
+					airportMapper.airportToDto(hd.getData()),
+					hd.getRevType(),
+					hd.getRevision(),
+					hd.getDate()
+					));
+		});
+		return airportDtosWithHistory ;
 	}
 	
 	@PostMapping

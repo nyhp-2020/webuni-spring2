@@ -2,6 +2,7 @@ package hu.webuni.airport.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class InitDbService {
 	private final FlightService flightService;
 	private final AddresstRepository addressRepository;
 	private final FlightRepository flightRepository;
+	private final JdbcTemplate jdbcTemplate;
 	
 	@Transactional
 	@LogCall
@@ -29,6 +31,13 @@ public class InitDbService {
 		flightRepository.deleteAll();
 		airportRepository.deleteAll();
 		addressRepository.deleteAll();
+	}
+	
+	@Transactional
+	public void deleteAudTables(){
+		jdbcTemplate.update("DELETE FROM address_aud");
+		jdbcTemplate.update("DELETE FROM airport_aud");
+		jdbcTemplate.update("DELETE FROM flight_aud");
 	}
 		
 	@Transactional
