@@ -3,6 +3,7 @@ package hu.webuni.airport;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 import hu.webuni.airport.service.AirportService;
 import hu.webuni.airport.service.InitDbService;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @SpringBootApplication
+@EnableCaching
 public class AirportApplication implements CommandLineRunner {
 
 	private final PriceService priceService;

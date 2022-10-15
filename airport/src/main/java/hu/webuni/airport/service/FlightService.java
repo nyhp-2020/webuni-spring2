@@ -113,7 +113,7 @@ public class FlightService {
 //	@Transactional --> hosszú tranzakció, mert a getDelay lassú
 //	@Scheduled(cron = "*/15 * * * * *")
 //	@Scheduled(cron = "0 0 * * * *") // startDelayPollingForFlight -hoz
-	@Scheduled(cron = "*/5 * * * * *")
+//	@Scheduled(cron = "*/5 * * * * *") //shedlock próbához
 	@SchedulerLock(name = "updateDelays")
 //	@Async
 	public void updateDelays() {
