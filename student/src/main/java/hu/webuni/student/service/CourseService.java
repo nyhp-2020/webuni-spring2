@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +30,7 @@ public class CourseService {
 	private final CourseRepository courseRepository;
 	
 	@Transactional
+	@Cacheable("pagedCoursesWithRelationships")
 	public List<Course> searchCourses(Predicate predicate,Pageable pageable){
 //		List<Course> courses = courseRepository.findAll(predicate,"Course.students",EntityGraphType.LOAD);
 //		courses = courseRepository.findAll(QCourse.course.in(courses),"Course.teachers",EntityGraphType.LOAD);
