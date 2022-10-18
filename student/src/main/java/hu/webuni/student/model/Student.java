@@ -43,4 +43,7 @@ public class Student {
 //	private Course course;
 	@ManyToMany(mappedBy = "students")
 	private Set<Course> courses;
+	
+//	private long cid; //central id
+//	private int ufsc; //used_free_semesters_count
 }
