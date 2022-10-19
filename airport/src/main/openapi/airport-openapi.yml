@@ -22,7 +22,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/AirportDto'
     put:
@@ -46,7 +46,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/AirportDto'
     delete:
@@ -78,7 +78,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/FlightDto'
   '/api/flights/{flightId}/pollDelay/{rate}':
@@ -117,7 +117,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -136,7 +136,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -161,7 +161,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -180,7 +180,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: '#/components/schemas/AirportDto'
   '/api/airports/{id}/history':
@@ -199,7 +199,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -208,7 +208,7 @@ paths:
     delete:
       tags:
         - flight-controller
-      operationId: startDelayPolling_1
+      operationId: stopDelayPolling
       parameters:
         - name: flightId
           in: path
