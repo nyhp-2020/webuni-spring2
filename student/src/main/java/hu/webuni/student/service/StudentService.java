@@ -47,7 +47,7 @@ public class StudentService {
 	}
 	
 	
-//	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "*/10 * * * * *")
 	public void updateUsedFreeSemesters() {
 		System.out.println("updateUsedFreeSemesters called");
 		studentRepository.findAll().forEach(s -> {

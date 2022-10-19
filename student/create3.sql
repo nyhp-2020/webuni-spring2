@@ -1,11 +1,21 @@
-
 create sequence hibernate_sequence start 1 increment 1;
 create table course (id int8 not null, name varchar(255), primary key (id));
+create table course_aud (id int8 not null, rev int4 not null, revtype int2, name varchar(255), primary key (id, rev));
 create table course_students (courses_id int8 not null, students_id int8 not null, primary key (courses_id, students_id));
+create table course_students_aud (rev int4 not null, courses_id int8 not null, students_id int8 not null, revtype int2, primary key (rev, courses_id, students_id));
 create table course_teachers (courses_id int8 not null, teachers_id int8 not null, primary key (courses_id, teachers_id));
-create table student (id int8 not null, birthdate date, name varchar(255), semester int4 not null, primary key (id));
+create table course_teachers_aud (rev int4 not null, courses_id int8 not null, teachers_id int8 not null, revtype int2, primary key (rev, courses_id, teachers_id));
+create table revinfo (rev int4 not null, revtstmp int8, primary key (rev));
+create table student (id int8 not null, birthdate date, cid int8 not null, name varchar(255), semester int4 not null, ufsc int4 not null, primary key (id));
+create table student_aud (id int8 not null, rev int4 not null, revtype int2, birthdate date, cid int8, name varchar(255), semester int4, ufsc int4, primary key (id, rev));
 create table teacher (id int8 not null, birthdate date, name varchar(255), primary key (id));
+create table teacher_aud (id int8 not null, rev int4 not null, revtype int2, birthdate date, name varchar(255), primary key (id, rev));
+alter table if exists course_aud add constraint FK7wota7b9g9bu9by751v8r8j65 foreign key (rev) references revinfo;
 alter table if exists course_students add constraint FK532dg5ikp3dvbrbiiqefdoe6m foreign key (students_id) references student;
 alter table if exists course_students add constraint FKh6irfl8rj4jgb3xrlyxsr2bdk foreign key (courses_id) references course;
+alter table if exists course_students_aud add constraint FK53xchn8n2cpmyfr1tvaa7ndvv foreign key (rev) references revinfo;
 alter table if exists course_teachers add constraint FKe3n62rwx3uc1yucgkmw6gjkm5 foreign key (teachers_id) references teacher;
 alter table if exists course_teachers add constraint FK5ntgqv47cbgq8s0la1myeg5ly foreign key (courses_id) references course;
+alter table if exists course_teachers_aud add constraint FKhxsr1pho67e2es9pv4v0js9l9 foreign key (rev) references revinfo;
+alter table if exists student_aud add constraint FKj009xm0wjydklskl2dgnfyyjq foreign key (rev) references revinfo;
+alter table if exists teacher_aud add constraint FKsg6tnk689ja9qg8qhnyarygx5 foreign key (rev) references revinfo;

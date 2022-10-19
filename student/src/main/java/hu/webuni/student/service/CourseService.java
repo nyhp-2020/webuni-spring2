@@ -2,8 +2,16 @@ package hu.webuni.student.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +27,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import hu.webuni.student.model.Course;
+import hu.webuni.student.model.HistoryData;
 import hu.webuni.student.model.QCourse;
 import hu.webuni.student.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +37,9 @@ import lombok.RequiredArgsConstructor;
 public class CourseService {
 	
 	private final CourseRepository courseRepository;
+	
+	@PersistenceContext //Injection
+	private EntityManager em;
 	
 	@Transactional
 	@Cacheable("pagedCoursesWithRelationships")
@@ -48,7 +60,26 @@ public class CourseService {
 	}
 	
 	public Optional<Course> findById(long id){
-		return courseRepository.findById(null);
+		return courseRepository.findById(id);
+	}
+	
+	@Transactional
+	public void delete(long id) {
+		courseRepository.deleteById(id);
+	}
+	
+	@Transactional
+	public Course save(Course course) {
+		return courseRepository.save(course);
+	}
+	
+	@Transactional
+	public Course update(Course course) {
+		if(courseRepository.existsById(course.getId())) {
+			return courseRepository.save(course);
+		}
+		else
+			throw new NoSuchElementException();
 	}
 	
 	public List<Course> findCoursesByExample(Course example) {
@@ -73,6 +104,32 @@ public class CourseService {
 
 		return Lists.newArrayList(courseRepository.findAll(ExpressionUtils.allOf(predicates)));
 		
+	}
+	
+	@Transactional
+	@SuppressWarnings({"rawtypes","unchecked"})
+	public List<HistoryData<Course>> getCourseHistory(long id){
+		List resultList = AuditReaderFactory.get(em)
+		.createQuery()
+//		.forRevisionsOfEntity(Course.class,true,true) //csak entitások,törölt sorok
+		.forRevisionsOfEntity(Course.class,false,true) //revision infok is,törölt sorok
+		.add(AuditEntity.property("id").eq(id))
+		.getResultList()
+		.stream()
+		.map(o ->{
+			Object[] objArray = (Object[])o;
+			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity)objArray[1];
+			Course course = (Course)objArray[0];
+			course.getStudents().size();
+			course.getTeachers().size();
+			return new HistoryData<Course>(
+				course,
+				(RevisionType)objArray[2],
+				revisionEntity.getId(),
+				revisionEntity.getRevisionDate()
+			);
+		}).toList();
+		return resultList;
 	}
 
 }

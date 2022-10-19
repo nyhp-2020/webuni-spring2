@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.envers.Audited;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,6 +28,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Cacheable
+@Audited
 public class Student {
 	
 	@Id
@@ -44,6 +47,6 @@ public class Student {
 	@ManyToMany(mappedBy = "students")
 	private Set<Course> courses;
 	
-//	private long cid; //central id
-//	private int ufsc; //used_free_semesters_count
+	private long cid; //central id
+	private int ufsc; //used_free_semesters_count
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class InitDbService {
 	private final StudentRepository studentRepository;
 	private final TeacherRepository teacherRepository;
 	private final CourseRepository courseRepository;
+	private final JdbcTemplate jdbcTemplate;
 	
 	@Transactional
 	public void addInitData() {
@@ -35,10 +37,10 @@ public class InitDbService {
 //		course3 = courseRepository.save(course3);
 //		course4 = courseRepository.save(course4);
 		
-		Student student1 = Student.builder().name("Kis Pál").birthdate(LocalDate.of(1981, 4, 12)).semester(1).build();
-		Student student2 = Student.builder().name("Ladó Béla").birthdate(LocalDate.of(1992, 3, 15)).semester(2).build();
-		Student student3 = Student.builder().name("Szél Kálmám").birthdate(LocalDate.of(1983, 9, 11)).semester(3).build();
-		Student student4 = Student.builder().name("Arató Dávid").birthdate(LocalDate.of(1984, 11, 5)).semester(4).build();
+		Student student1 = Student.builder().name("Kis Pál").birthdate(LocalDate.of(1981, 4, 12)).semester(1).cid(0).ufsc(0).build();
+		Student student2 = Student.builder().name("Ladó Béla").birthdate(LocalDate.of(1992, 3, 15)).semester(2).cid(0).ufsc(0).build();
+		Student student3 = Student.builder().name("Szél Kálmám").birthdate(LocalDate.of(1983, 9, 11)).semester(3).cid(0).ufsc(0).build();
+		Student student4 = Student.builder().name("Arató Dávid").birthdate(LocalDate.of(1984, 11, 5)).semester(4).cid(0).ufsc(0).build();
 		
 //		student1.setCourse(course1);
 //		student2.setCourse(course1);
@@ -87,7 +89,16 @@ public class InitDbService {
 		courseRepository.deleteAll();
 		studentRepository.deleteAll();
 		teacherRepository.deleteAll();
-	}	
+	}
+	
+	@Transactional
+	public void deleteAudTables(){
+		jdbcTemplate.update("DELETE FROM course_aud");
+		jdbcTemplate.update("DELETE FROM student_aud");
+		jdbcTemplate.update("DELETE FROM teacher_aud");
+		jdbcTemplate.update("DELETE FROM course_students_aud");
+		jdbcTemplate.update("DELETE FROM course_teachers_aud");
+	}
 	
 
 

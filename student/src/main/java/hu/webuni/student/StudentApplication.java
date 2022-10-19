@@ -22,6 +22,7 @@ public class StudentApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		initDbService.deleteDB();
+		initDbService.deleteAudTables();
 		initDbService.addInitData();
 		
 	}
