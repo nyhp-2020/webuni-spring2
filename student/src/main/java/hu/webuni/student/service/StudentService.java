@@ -56,15 +56,15 @@ public class StudentService {
 	}
 
 	private void updateStudentWithUsedFreeSemesters(Student s) {
-		int usedFreeSemesters;
+		int usedFreeSemesters = 0;
 		try {
-//			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
-			usedFreeSemesters = semesterService.getUsedFreeSemesters(0);
+			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
+//			usedFreeSemesters = semesterService.getUsedFreeSemesters(0);
 		} catch (Exception e) {
 			System.out.println("Exception occured");
 		}
-//		s.setUfsc(semesterService.getUsedFreeSemesters(usedFreeSemesters));
-//		studentRepository.save(s);	
+		s.setUfsc(usedFreeSemesters);
+		studentRepository.save(s);	
 	}
 
 }
