@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import hu.webuni.airport.dto.AirportDto;
+import hu.webuni.airport.api.model.AirportDto;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
@@ -27,11 +27,10 @@ public class AirportControllerIT {
 	void testThatCreatedAirportIsListed() throws Exception {
 		List<AirportDto> airportsBefore = getAllAirports();
 		
-		AirportDto newAirport =AirportDto.builder()
-				.id(5)
+		AirportDto newAirport = new AirportDto()
+				.id(5L)
 				.name("faasffgaf")
-				.iata("IGH")
-				.build();
+				.iata("IGH");
 				
 //				new AirportDto(5, "faasffgaf", "IGH");
 		

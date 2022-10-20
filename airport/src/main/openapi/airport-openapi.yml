@@ -22,7 +22,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/AirportDto'
     put:
@@ -46,7 +46,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/AirportDto'
     delete:
@@ -78,7 +78,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/FlightDto'
   '/api/flights/{flightId}/pollDelay/{rate}':
@@ -117,7 +117,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -136,7 +136,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -152,16 +152,23 @@ paths:
           required: false
           schema:
             type: boolean
-        - name: pageable
+        - schema:
+            type: integer
           in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Pageable'
+          name: page
+        - schema:
+            type: integer
+          in: query
+          name: size
+        - schema:
+            type: string
+          in: query
+          name: sort
       responses:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -180,7 +187,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/AirportDto'
   '/api/airports/{id}/history':
@@ -199,7 +206,7 @@ paths:
         '200':
           description: OK
           content:
-            'application/json':
+            application/json:
               schema:
                 type: array
                 items:
@@ -277,33 +284,6 @@ components:
           $ref: '#/components/schemas/AirportDto'
     Predicate:
       type: object
-    Pageable:
-      type: object
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/Sort'
-    Sort:
-      type: object
-      properties:
-        sorted:
-          type: boolean
-        unsorted:
-          type: boolean
-        empty:
-          type: boolean
     HistoryDataAirportDto:
       type: object
       properties:

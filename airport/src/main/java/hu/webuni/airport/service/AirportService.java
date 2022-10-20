@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.webuni.airport.model.Address;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.HistoryData;
 import hu.webuni.airport.repository.AirportRepository;
@@ -161,7 +162,9 @@ public class AirportService {
 			Object[] objArray = (Object[])o;
 			DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity)objArray[1];
 			Airport airport = (Airport)objArray[0];
-			airport.getAddress().getCity(); //kikényszeríti a betöltést
+			Address address = airport.getAddress();
+			if(address != null)
+				address.getCity(); //kikényszeríti a betöltést
 			airport.getArrivals().size();
 			airport.getDepartures().size();
 			return new HistoryData<Airport>(

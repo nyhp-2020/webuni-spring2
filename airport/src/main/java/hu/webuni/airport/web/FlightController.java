@@ -1,62 +1,57 @@
 package hu.webuni.airport.web;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.NativeWebRequest;
 
-import com.querydsl.core.types.Predicate;
-
-import hu.webuni.airport.dto.FlightDto;
+import hu.webuni.airport.api.FlightControllerApi;
+import hu.webuni.airport.api.model.FlightDto;
 import hu.webuni.airport.mapper.FlightMapper;
 import hu.webuni.airport.model.Flight;
 import hu.webuni.airport.repository.FlightRepository;
 import hu.webuni.airport.service.FlightService;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/flights")
-public class FlightController {
-
+@RequiredArgsConstructor
+public class FlightController implements FlightControllerApi{
+	
+	private final NativeWebRequest nativeWebRequest;
 	private final FlightService flightService;
 	private final FlightRepository flightRepository;
 	private final FlightMapper flightMapper;
 	
-	
-	@PostMapping
-	public FlightDto createFlight(@RequestBody @Valid FlightDto flightDto) {
+	@Override
+	public Optional<NativeWebRequest> getRequest() {
+		return Optional.of(nativeWebRequest);
+	}
+
+	@Override
+	public ResponseEntity<FlightDto> createFlight(@Valid FlightDto flightDto) {
 		Flight flight = flightService.save(flightMapper.dtoToFlight(flightDto));
-		return flightMapper.flightToDto(flight);
+		return ResponseEntity.ok( flightMapper.flightToDto(flight));
 	}
-	
-	@PostMapping("/search")
-	public List<FlightDto> searchFlights(@RequestBody FlightDto example){
-		return flightMapper.flightsToDtos(flightService.findFlightsByExample(flightMapper.dtoToFlight(example)));
+
+	@Override
+	public ResponseEntity<List<FlightDto>> searchFlights(@Valid FlightDto example) {
+		return ResponseEntity.ok(flightMapper.flightsToDtos(flightService.findFlightsByExample(flightMapper.dtoToFlight(example))));
 	}
-	
-	@GetMapping("/search")
-	public List<FlightDto> searchFlights2(@QuerydslPredicate(root = Flight.class) Predicate predicate){
-		return flightMapper.flightsToDtos(flightRepository.findAll(predicate));
-	}
-	
-	@PostMapping("/{flightId}/pollDelay/{rate}")
-	public void startDelayPolling(@PathVariable long flightId,@PathVariable long rate) {
+
+	@Override
+	public ResponseEntity<Void> startDelayPolling(Long flightId, Long rate) {
 		flightService.startDelayPollingForFlight(flightId, rate);
+		return ResponseEntity.ok().build();
 	}
-	
-	@DeleteMapping("/{flightId}/pollDelay")
-	public void startDelayPolling(@PathVariable long flightId) {
+
+	@Override
+	public ResponseEntity<Void> stopDelayPolling(Long flightId) {
 		flightService.stopDelayPollingForFlight(flightId);
+		return ResponseEntity.ok().build();
 	}
-	
 
 }

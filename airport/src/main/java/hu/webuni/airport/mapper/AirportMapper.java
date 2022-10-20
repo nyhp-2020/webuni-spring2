@@ -7,8 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import hu.webuni.airport.dto.AirportDto;
-import hu.webuni.airport.dto.FlightDto;
+import hu.webuni.airport.api.model.AirportDto;
+import hu.webuni.airport.api.model.FlightDto;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.Flight;
 
