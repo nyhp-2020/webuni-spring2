@@ -108,11 +108,25 @@ paths:
         - flight-controller
       operationId: searchFlights2
       parameters:
-        - name: predicate
+        - schema:
+            type: integer
+            format: int64
           in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Predicate'
+          name: id
+        - schema:
+            type: string
+          in: query
+          name: flightNumber
+        - schema:
+            type: string
+          in: query
+          name: takeoff.iata
+        - schema:
+            type: array
+            items:
+              type: string
+          in: query
+          name: takeoffTime
       responses:
         '200':
           description: OK
@@ -122,6 +136,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/FlightDto'
+      description: ''
     post:
       tags:
         - flight-controller
@@ -161,9 +176,12 @@ paths:
           in: query
           name: size
         - schema:
-            type: string
+            type: array
+            items:
+              type: string
           in: query
           name: sort
+          description: ''
       responses:
         '200':
           description: OK
@@ -226,6 +244,80 @@ paths:
       responses:
         '200':
           description: OK
+  '/api/airports/{id}/images':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    post:
+      tags:
+        - airport-controller
+      summary: ''
+      operationId: uploadImageForAirport
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                content:
+                  type: string
+                  format: binary
+  '/api/images/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - image-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+      operationId: downloadImage
+  '/api/flights/{id}/delay/{delay}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+      - schema:
+          type: integer
+          format: int32
+        name: delay
+        in: path
+        required: true
+    put:
+      summary: ''
+      operationId: reportDelay
+      responses:
+        '200':
+          description: OK
+      tags:
+        - flight-controller
 components:
   schemas:
     AddressDto:
@@ -282,8 +374,6 @@ components:
           $ref: '#/components/schemas/AirportDto'
         landing:
           $ref: '#/components/schemas/AirportDto'
-    Predicate:
-      type: object
     HistoryDataAirportDto:
       type: object
       properties:

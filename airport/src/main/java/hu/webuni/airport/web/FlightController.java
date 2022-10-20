@@ -1,13 +1,21 @@
 package hu.webuni.airport.web;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.core.MethodParameter;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.ModelAndViewContainer;
+
+import com.querydsl.core.types.Predicate;
 
 import hu.webuni.airport.api.FlightControllerApi;
 import hu.webuni.airport.api.model.FlightDto;
@@ -25,6 +33,7 @@ public class FlightController implements FlightControllerApi{
 	private final FlightService flightService;
 	private final FlightRepository flightRepository;
 	private final FlightMapper flightMapper;
+	private final QuerydslPredicateArgumentResolver prediacateResolver;
 	
 	@Override
 	public Optional<NativeWebRequest> getRequest() {
@@ -53,5 +62,30 @@ public class FlightController implements FlightControllerApi{
 		flightService.stopDelayPollingForFlight(flightId);
 		return ResponseEntity.ok().build();
 	}
+
+	public void configurePredicate(@QuerydslPredicate(root = Flight.class) Predicate predicate) {}
+	
+	@Override
+	public ResponseEntity<List<FlightDto>> searchFlights2(@Valid Long id, @Valid String flightNumber,
+			@Valid String takeoffIata, @Valid List<String> takeoffTime) {
+
+		Predicate predicate = createPredicate("configurePredicate");
+		return ResponseEntity.ok(flightMapper.flightsToDtos(flightRepository.findAll(predicate)));
+	}
+	
+	private Predicate createPredicate(String configMethodName) {
+		Method method;
+		try {
+			method = this.getClass().getMethod(configMethodName, Predicate.class);
+			MethodParameter methodParameter = new MethodParameter(method, 0);
+			ModelAndViewContainer mavContainer = null;
+			WebDataBinderFactory binderFactory = null;
+			return (Predicate) prediacateResolver.resolveArgument(methodParameter, mavContainer, nativeWebRequest, binderFactory);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	
 
 }

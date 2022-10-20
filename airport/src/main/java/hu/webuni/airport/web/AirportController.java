@@ -1,5 +1,7 @@
 package hu.webuni.airport.web;
 
+import java.awt.Image;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.airport.api.AirportControllerApi;
@@ -33,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class AirportController implements AirportControllerApi{
+public class AirportController implements AirportControllerApi {
 	
 	private final NativeWebRequest nativeWebRequest;
 	private final AirportService airportService;
@@ -42,7 +45,6 @@ public class AirportController implements AirportControllerApi{
 	private final AirportMapper airportMapper;
 	private final HistoryDataMapper historyDataMapper;
 	private final PageableHandlerMethodArgumentResolver pageableResolver;
-	
 	
 	@Override
 	public Optional<NativeWebRequest> getRequest() {
@@ -71,14 +73,16 @@ public class AirportController implements AirportControllerApi{
 
 	@Override
 	public ResponseEntity<List<HistoryDataAirportDto>> getHistoryById(Long id) {
+		
 		List<HistoryData<Airport>> airports = airportService.getAirportHistory(id);
 		
 		List<HistoryDataAirportDto> airportDtosWithHistory = new ArrayList<>();
 		
-		airports.forEach(hd -> {
+		airports.forEach(hd ->{
 			airportDtosWithHistory.add(historyDataMapper.airportHistoryDataToDto(hd));
 		});
-		return ResponseEntity.ok(airportDtosWithHistory) ;
+		
+		return ResponseEntity.ok(airportDtosWithHistory);
 	}
 
 	@Override
@@ -93,29 +97,26 @@ public class AirportController implements AirportControllerApi{
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	public void configPageable(@SortDefault("id") Pageable pageable) {}
 
+	public void configPageable(@SortDefault("id") Pageable pageable) {}
+	
 	@Override
 	public ResponseEntity<List<AirportDto>> getAll(@Valid Boolean full, @Valid Integer page, @Valid Integer size,
-			@Valid String sort) {
+			@Valid List<String> sort) {
 		
 		boolean isFull = full == null ? false : full;
 		
 		Pageable pageable = createPageable("configPageable");
 		
-		//		List<Airport> airports = airportService.findAll();
 		List<Airport> airports = isFull 
 				? airportService.findAllWithRelationships(pageable)
 //				? airportRepository.findAllWithAddressAndDepartures() --> N*M sor jön vissza, ha N arrival és M departure van
 				: airportRepository.findAll(pageable).getContent();
 		
-		List<AirportDto> resultList = isFull
-		? airportMapper.airportsToDtos(airports)
-		: airportMapper.airportSummariesToDtos(airports);
-		
+		List<AirportDto> resultList = isFull 
+				? airportMapper.airportsToDtos(airports)
+				: airportMapper.airportSummariesToDtos(airports);
 		return ResponseEntity.ok(resultList);
-
 	}
 
 	private Pageable createPageable(String pageableConfigurerMethodName) {
@@ -133,4 +134,19 @@ public class AirportController implements AirportControllerApi{
 		return pageable;
 	}
 
-}
+//	@Override
+//	public ResponseEntity<String> uploadImageForAirport(Long id, @Valid String fileName,
+//			@Valid MultipartFile content) {
+//		Image image;
+//		try {
+//			image = airportService.saveImageForAirport(id, fileName, content.getBytes());
+//			return ResponseEntity.ok("/api/images/" + image.getId());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+//	}
+
+	
+}	
+	
