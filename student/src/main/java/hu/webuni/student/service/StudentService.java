@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class StudentService {
+	
+//	@Value("${student.scheduled.cronparam}")
+//	private String cronparam;
 	
 	private final SemesterService semesterService;
 	
@@ -47,7 +51,8 @@ public class StudentService {
 	}
 	
 	
-	@Scheduled(cron = "*/10 * * * * *")
+//	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "${student.scheduled.cronparam}")
 	public void updateUsedFreeSemesters() {
 		System.out.println("updateUsedFreeSemesters called");
 		studentRepository.findAll().forEach(s -> {
