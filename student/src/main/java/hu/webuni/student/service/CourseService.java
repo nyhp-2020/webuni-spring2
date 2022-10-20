@@ -60,7 +60,8 @@ public class CourseService {
 	}
 	
 	public Optional<Course> findById(long id){
-		return courseRepository.findById(id);
+//		return courseRepository.findById(id);
+		return Optional.ofNullable(courseRepository.findByIdWithRelationships(id));
 	}
 	
 	@Transactional

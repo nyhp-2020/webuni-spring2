@@ -3,8 +3,10 @@ package hu.webuni.student.repository;
 import java.util.Iterator;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -37,4 +39,7 @@ public interface CourseRepository extends
 		});
 	}
 
+	@EntityGraph(attributePaths = {"students","teachers"})
+	@Query("SELECT c FROM Course c WHERE c.id = :id")
+	Course findByIdWithRelationships(long id);
 }

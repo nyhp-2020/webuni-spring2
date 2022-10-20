@@ -61,7 +61,8 @@ public class CourseController {
 	public CourseDto getById(@PathVariable long id) {
 		Course course = courseService.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-		return courseMapper.courseSummaryToDto(course);
+//		return courseMapper.courseSummaryToDto(course);
+		return courseMapper.courseToDto(course);
 	}
 	
 	@GetMapping("/{id}/history")
