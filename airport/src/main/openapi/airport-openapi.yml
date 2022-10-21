@@ -275,6 +275,7 @@ paths:
                 content:
                   type: string
                   format: binary
+        description: ''
   '/api/images/{id}':
     parameters:
       - schema:

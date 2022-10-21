@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.JoinType;
 
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
@@ -20,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.webuni.airport.model.Address;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.HistoryData;
+import hu.webuni.airport.model.Image;
 import hu.webuni.airport.repository.AirportRepository;
+import hu.webuni.airport.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class AirportService {
 
 	private final AirportRepository airportRepository;
+	private final ImageRepository imageRepository;
 	
 	@PersistenceContext  //injektálás
 	private EntityManager em;
@@ -178,5 +180,16 @@ public class AirportService {
 		return resultList;
 	}
 	
+	@javax.transaction.Transactional
+	public Image saveImageForAirport(long airportId, String fileName, byte[] bytes) {
+		Airport airport = airportRepository.findById(airportId).get();
+		Image image = Image.builder()
+				.data(bytes)
+				.fileName(fileName)
+				.build();
+		image = imageRepository.save(image);
+		airport.getImages().add(image);
+		return image;
+	}
 	
 }

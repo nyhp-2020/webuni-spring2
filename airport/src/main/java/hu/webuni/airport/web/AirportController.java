@@ -1,6 +1,6 @@
 package hu.webuni.airport.web;
 
-import java.awt.Image;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.mapper.HistoryDataMapper;
 import hu.webuni.airport.model.Airport;
 import hu.webuni.airport.model.HistoryData;
+import hu.webuni.airport.model.Image;
 import hu.webuni.airport.repository.AirportRepository;
 import hu.webuni.airport.service.AirportService;
 import lombok.RequiredArgsConstructor;
@@ -134,18 +135,18 @@ public class AirportController implements AirportControllerApi {
 		return pageable;
 	}
 
-//	@Override
-//	public ResponseEntity<String> uploadImageForAirport(Long id, @Valid String fileName,
-//			@Valid MultipartFile content) {
-//		Image image;
-//		try {
-//			image = airportService.saveImageForAirport(id, fileName, content.getBytes());
-//			return ResponseEntity.ok("/api/images/" + image.getId());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
-//	}
+	@Override
+	public ResponseEntity<String> uploadImageForAirport(Long id, @Valid String fileName,
+			@Valid MultipartFile content) {
+		Image image;
+		try {
+			image = airportService.saveImageForAirport(id, fileName, content.getBytes());
+			return ResponseEntity.ok("/api/images/" + image.getId());
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 
 	
 }	
