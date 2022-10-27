@@ -19,8 +19,12 @@ public class DelayController {
 	@GetMapping("/api/flights/{id}/delay")
 	@Async
 	public CompletableFuture<Integer> getDelayForFlight(@PathVariable long id) {
+//	public int getDelayForFlight(@PathVariable long id) {
 		System.out.println("DelayService.getDelayForFlight called at thread " + Thread.currentThread().getName());
-
+		
+//		CompletableFuture<Integer> result = delayService.getDelay(id);
+		
 		return CompletableFuture.completedFuture(delayService.getDelay(id));
+//		return 0;
 	}
 }

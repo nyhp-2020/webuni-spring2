@@ -2,7 +2,7 @@ package hu.webuni.student.mapper;
 
 import org.mapstruct.Mapper;
 
-import hu.webuni.student.dto.TeacherDto;
+import hu.webuni.student.api.model.TeacherDto;
 import hu.webuni.student.model.Teacher;
 
 @Mapper(componentModel = "spring")

@@ -1,11 +1,11 @@
 package hu.webuni.student.repository;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -42,4 +42,12 @@ public interface CourseRepository extends
 	@EntityGraph(attributePaths = {"students","teachers"})
 	@Query("SELECT c FROM Course c WHERE c.id = :id")
 	Course findByIdWithRelationships(long id);
+	
+	@EntityGraph(attributePaths = {"students"})
+	@Query("SELECT c FROM Course c")
+	List<Course>findAllWithStudents();
+	
+	@EntityGraph(attributePaths = {"students"})
+	@Query("SELECT c.id, AVG(s.semester) FROM Course c JOIN c.students s GROUP BY c")
+	List<Object>findAverageOfSemesterOfStudents();
 }

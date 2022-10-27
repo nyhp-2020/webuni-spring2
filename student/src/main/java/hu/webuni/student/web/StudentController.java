@@ -1,30 +1,38 @@
 package hu.webuni.student.web;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import hu.webuni.student.dto.StudentDto;
+import hu.webuni.student.api.StudentControllerApi;
+import hu.webuni.student.api.model.StudentDto;
 import hu.webuni.student.mapper.StudentMapper;
 import hu.webuni.student.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/students")
-public class StudentController {
-	
+@RequiredArgsConstructor
+public class StudentController implements StudentControllerApi{
+
+	private final NativeWebRequest nativeWebRequest;
 	private final StudentRepository studentRepository;
-	
+
 	private final StudentMapper studentMapper;
-	
-	@GetMapping("/{id}")
-	public StudentDto findById(@PathVariable("id") long id) {
-		return studentMapper.studentToDto(studentRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+
+	@Override
+	public Optional<NativeWebRequest> getRequest() {
+		return Optional.of(nativeWebRequest);
 	}
+
+	@Override
+	public ResponseEntity<StudentDto> findById1(Long id) {
+		return ResponseEntity.ok(studentMapper.studentToDto(studentRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
+	}
+
 
 }

@@ -1,98 +1,92 @@
 package hu.webuni.student.web;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.querydsl.core.types.Predicate;
 
-import hu.webuni.student.dto.CourseDto;
+import hu.webuni.student.api.CourseControllerApi;
+import hu.webuni.student.api.model.CourseDto;
+import hu.webuni.student.api.model.HistoryDataCourseDto;
 import hu.webuni.student.mapper.CourseMapper;
+import hu.webuni.student.mapper.HistoryDataMapper;
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.HistoryData;
 import hu.webuni.student.repository.CourseRepository;
 import hu.webuni.student.service.CourseService;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/courses")
-public class CourseController {
-	
+@RequiredArgsConstructor
+public class CourseController implements CourseControllerApi {
+
+	private final NativeWebRequest nativeWebRequest;
 	private final CourseService courseService;
 	private final CourseMapper courseMapper;
 	private final CourseRepository courseRepository;
 
-	@PostMapping("/search")
-	public List<CourseDto> searchCourses(@RequestBody CourseDto example){
-		return courseMapper.coursesToDtos(courseService.findCoursesByExample(courseMapper.dtoToCourse(example)));
-	}
-	
-	@GetMapping("/search")
-	public List<CourseDto> searchCourses2(@QuerydslPredicate(root = Course.class) Predicate predicate,@RequestParam Optional<Boolean> full,@SortDefault("id") Pageable pageable){
-//		Iterable<Course> result = courseRepository.findAll(predicate);
-		boolean isSummaryNeeded = full.isEmpty() || !full.get();
-		Iterable<Course> result = isSummaryNeeded ? courseRepository.findAll(predicate, pageable) : courseService.searchCourses(predicate,pageable);
+	private final HistoryDataMapper historyDataMapper;
 
-		if(isSummaryNeeded) {
-			return courseMapper.courseSummariesToDtos(result);
-		} else
-			return courseMapper.coursesToDtos(result);
+	private final PageableHandlerMethodArgumentResolver pageableResolver;
+	private final QuerydslPredicateArgumentResolver prediacateResolver;
+
+	@Override
+	public Optional<NativeWebRequest> getRequest() {
+		return Optional.of(nativeWebRequest);
 	}
-	
-	@GetMapping("/{id}")
-	public CourseDto getById(@PathVariable long id) {
-		Course course = courseService.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//		return courseMapper.courseSummaryToDto(course);
-		return courseMapper.courseToDto(course);
-	}
-	
-	@GetMapping("/{id}/history")
-	public List<HistoryData<CourseDto>> getHistoryById(@PathVariable long id) {
-		List<HistoryData<Course>> courses = courseService.getCourseHistory(id);
-		
-		List<HistoryData<CourseDto>> courseDtosWithHistory = new ArrayList<>();
-		
-		courses.forEach(hd -> {
-			courseDtosWithHistory.add(new HistoryData<>(
-//					courseMapper.courseSummaryToDto(hd.getData()),
-					courseMapper.courseToDto(hd.getData()),
-					hd.getRevType(),
-					hd.getRevision(),
-					hd.getDate()
-					));
-		});
-		
-		return courseDtosWithHistory;
-//		return courseMapper.courseSummariesToDtos(courses);
-	}
-	
-	@PostMapping
-	public CourseDto createCourse(@RequestBody CourseDto courseDto) {
+
+	@Override
+	public ResponseEntity<CourseDto> createCourse(@Valid CourseDto courseDto) {
 		Course course = courseService.save(courseMapper.dtoToCourse(courseDto));
-		return courseMapper.courseToDto(course);
+		return ResponseEntity.ok(courseMapper.courseToDto(course));
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<CourseDto> modifyCourse(@PathVariable long id, @RequestBody CourseDto courseDto) {
+
+	@Override
+	public ResponseEntity<Void> deleteCourse(Long id) {
+		courseService.delete(id);
+		return ResponseEntity.ok().build();
+	}
+
+	@Override
+	public ResponseEntity<CourseDto> getById(Long id) {
+		Course course = courseService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		return ResponseEntity.ok(courseMapper.courseToDto(course));
+	}
+
+	@Override
+	public ResponseEntity<List<HistoryDataCourseDto>> getHistoryById(Long id) {
+		List<HistoryData<Course>> courses = courseService.getCourseHistory(id);
+
+		List<HistoryDataCourseDto> courseDtosWithHistory = new ArrayList<>();
+
+		courses.forEach(hd -> {
+			courseDtosWithHistory.add(historyDataMapper.courseHistoryDataToDto(hd));
+		});
+
+		return ResponseEntity.ok(courseDtosWithHistory);
+	}
+
+	@Override
+	public ResponseEntity<CourseDto> modifyCourse(Long id, @Valid CourseDto courseDto) {
 		Course course = courseMapper.dtoToCourse(courseDto);
 		course.setId(id);
 		try {
@@ -103,10 +97,70 @@ public class CourseController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@DeleteMapping("/{id}")
-	public void deleteCourse(@PathVariable long id) {
-		courseService.delete(id);
+
+	@Override
+	public ResponseEntity<List<CourseDto>> searchCourses(@Valid CourseDto example) {
+		return ResponseEntity
+				.ok(courseMapper.coursesToDtos(courseService.findCoursesByExample(courseMapper.dtoToCourse(example))));
 	}
-	
+
+	public void configPageable(@SortDefault("id") Pageable pageable) {
+	}
+
+	private Pageable createPageable(String pageableConfigurerMethodName) {
+		Method method;
+		try {
+			method = this.getClass().getMethod(pageableConfigurerMethodName, Pageable.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		MethodParameter methodParameter = new MethodParameter(method, 0);
+		ModelAndViewContainer mavContainer = null;
+		WebDataBinderFactory binderFactory = null;
+		Pageable pageable = pageableResolver.resolveArgument(methodParameter, mavContainer, nativeWebRequest,
+				binderFactory);
+		return pageable;
+	}
+
+	public void configurePredicate(@QuerydslPredicate(root = Course.class) Predicate predicate) {
+	}
+
+	private Predicate createPredicate(String configMethodName) {
+		Method method;
+		try {
+			method = this.getClass().getMethod(configMethodName, Predicate.class);
+			MethodParameter methodParameter = new MethodParameter(method, 0);
+			ModelAndViewContainer mavContainer = null;
+			WebDataBinderFactory binderFactory = null;
+			return (Predicate) prediacateResolver.resolveArgument(methodParameter, mavContainer, nativeWebRequest,
+					binderFactory);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public ResponseEntity<List<CourseDto>> searchCourses2(@Valid Boolean full, @Valid Integer page, @Valid Integer size,
+			@Valid String sort, @Valid Long id, @Valid String name, @Valid Long studentsId, @Valid String teachersName,
+			@Valid List<Object> studentsSemester) {
+
+		boolean isFull = full == null ? false : full;
+		boolean isSummaryNeeded = !isFull;
+
+		Pageable pageable = createPageable("configPageable");
+
+		Predicate predicate = createPredicate("configurePredicate");
+
+		Iterable<Course> result = isSummaryNeeded ? courseRepository.findAll(predicate, pageable)
+				: courseService.searchCourses(predicate, pageable);
+
+		if (isSummaryNeeded) {
+			return ResponseEntity.ok(courseMapper.courseSummariesToDtos(result));
+		} else
+			return ResponseEntity.ok(courseMapper.coursesToDtos(result));
+
+	}
+
 }

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import hu.webuni.student.dto.CourseDto;
+import hu.webuni.student.api.model.CourseDto;
 import hu.webuni.student.model.Course;
 
 @Mapper(componentModel = "spring")
