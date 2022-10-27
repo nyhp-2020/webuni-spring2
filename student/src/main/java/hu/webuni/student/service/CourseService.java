@@ -136,7 +136,7 @@ public class CourseService {
 	
 	@Transactional
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Course getVersionAt(int id, OffsetDateTime when) {
+	public Course getVersionAt(long id, OffsetDateTime when) {
 
 		long epochMillis = when.toInstant().toEpochMilli();
 		
