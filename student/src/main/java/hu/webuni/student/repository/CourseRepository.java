@@ -11,6 +11,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
+import hu.webuni.student.api.model.GetAvgOfSemesterOfStudents200ResponseInner;
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.QCourse;
 
@@ -49,5 +50,6 @@ public interface CourseRepository extends
 	
 	@EntityGraph(attributePaths = {"students"})
 	@Query("SELECT c.id, AVG(s.semester) FROM Course c JOIN c.students s GROUP BY c")
-	List<Object>findAverageOfSemesterOfStudents();
+	List<GetAvgOfSemesterOfStudents200ResponseInner>findAverageOfSemesterOfStudents();
+//	List<Object>findAverageOfSemesterOfStudents();
 }

@@ -216,6 +216,44 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/HistoryDataCourseDto'
+  /api/courses/students/semester/avg:
+    get:
+      tags:
+        - course-controller
+      operationId: getAvgOfSemesterOfStudents
+      summary: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    avg:
+                      type: number
+                      format: double
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    avg:
+                      type: number
+                      format: double
+    parameters: []
 components:
   schemas:
     CourseDto:

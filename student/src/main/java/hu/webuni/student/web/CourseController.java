@@ -26,6 +26,7 @@ import com.querydsl.core.types.Predicate;
 
 import hu.webuni.student.api.CourseControllerApi;
 import hu.webuni.student.api.model.CourseDto;
+import hu.webuni.student.api.model.GetAvgOfSemesterOfStudents200ResponseInner;
 import hu.webuni.student.api.model.HistoryDataCourseDto;
 import hu.webuni.student.mapper.CourseMapper;
 import hu.webuni.student.mapper.HistoryDataMapper;
@@ -161,6 +162,11 @@ public class CourseController implements CourseControllerApi {
 		} else
 			return ResponseEntity.ok(courseMapper.coursesToDtos(result));
 
+	}
+
+	@Override
+	public ResponseEntity<List<GetAvgOfSemesterOfStudents200ResponseInner>> getAvgOfSemesterOfStudents() {
+		return ResponseEntity.ok(courseRepository.findAverageOfSemesterOfStudents());
 	}
 
 }
