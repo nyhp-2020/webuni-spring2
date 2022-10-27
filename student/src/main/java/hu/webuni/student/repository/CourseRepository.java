@@ -48,8 +48,13 @@ public interface CourseRepository extends
 	@Query("SELECT c FROM Course c")
 	List<Course>findAllWithStudents();
 	
-	@EntityGraph(attributePaths = {"students"})
-	@Query("SELECT c.id, AVG(s.semester) FROM Course c JOIN c.students s GROUP BY c")
-	List<GetAvgOfSemesterOfStudents200ResponseInner>findAverageOfSemesterOfStudents();
+//	@EntityGraph(attributePaths = {"students"})
+	@Query("SELECT c.id, AVG(s.semester) FROM Course c JOIN c.students s GROUP BY c.id")
+	List<Object>findAverageOfSemesterOfStudents();
+//	List<GetAvgOfSemesterOfStudents200ResponseInner>findAverageOfSemesterOfStudents();
 //	List<Object>findAverageOfSemesterOfStudents();
+	
+//	@EntityGraph(attributePaths = {"students"})
+//	@Query("SELECT c.id, AVG(s.semester) FROM Course c,Student s GROUP BY c")
+//	List<GetAvgOfSemesterOfStudents200ResponseInner>findAverageOfSemesterOfStudents();
 }

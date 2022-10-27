@@ -30,6 +30,7 @@ import hu.webuni.student.api.model.GetAvgOfSemesterOfStudents200ResponseInner;
 import hu.webuni.student.api.model.HistoryDataCourseDto;
 import hu.webuni.student.mapper.CourseMapper;
 import hu.webuni.student.mapper.HistoryDataMapper;
+import hu.webuni.student.mapper.ObjectArrayDataMapper;
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.HistoryData;
 import hu.webuni.student.repository.CourseRepository;
@@ -49,6 +50,7 @@ public class CourseController implements CourseControllerApi {
 
 	private final PageableHandlerMethodArgumentResolver pageableResolver;
 	private final QuerydslPredicateArgumentResolver prediacateResolver;
+	private final ObjectArrayDataMapper oaDataMapper;
 
 	@Override
 	public Optional<NativeWebRequest> getRequest() {
@@ -166,7 +168,8 @@ public class CourseController implements CourseControllerApi {
 
 	@Override
 	public ResponseEntity<List<GetAvgOfSemesterOfStudents200ResponseInner>> getAvgOfSemesterOfStudents() {
-		return ResponseEntity.ok(courseRepository.findAverageOfSemesterOfStudents());
+		List<GetAvgOfSemesterOfStudents200ResponseInner> results = oaDataMapper.objsToInners(courseRepository.findAverageOfSemesterOfStudents());
+		return ResponseEntity.ok(results);
 	}
 
 }
