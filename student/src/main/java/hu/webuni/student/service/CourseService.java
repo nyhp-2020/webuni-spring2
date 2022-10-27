@@ -1,5 +1,6 @@
 package hu.webuni.student.service;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -131,6 +132,31 @@ public class CourseService {
 			);
 		}).toList();
 		return resultList;
+	}
+	
+	@Transactional
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Course getVersionAt(int id, OffsetDateTime when) {
+
+		long epochMillis = when.toInstant().toEpochMilli();
+		
+		List resultList = AuditReaderFactory.get(em)
+			.createQuery()			
+			.forRevisionsOfEntity(Course.class, true, false)
+			.add(AuditEntity.property("id").eq(id))
+			.add(AuditEntity.revisionProperty("timestamp").le(epochMillis))
+			.addOrder(AuditEntity.revisionProperty("timestamp").desc())
+				.setMaxResults(1)
+				.getResultList();
+		
+		if(!resultList.isEmpty()) {
+			Course course = (Course) resultList.get(0);
+			course.getStudents().size();
+			course.getTeachers().size();
+			return course;
+		}
+					
+		return null;
 	}
 
 }
