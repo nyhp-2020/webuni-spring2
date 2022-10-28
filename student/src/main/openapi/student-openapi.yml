@@ -254,6 +254,31 @@ paths:
                       type: number
                       format: double
     parameters: []
+  '/api/courses/{id}/versions':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+    get:
+      summary: Your GET endpoint
+      tags: 
+        - course-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDto'
+      operationId: getVersionAt
+      parameters:
+        - schema:
+            type: string
+            format: date-time
+          in: query
+          name: at
 components:
   schemas:
     CourseDto:

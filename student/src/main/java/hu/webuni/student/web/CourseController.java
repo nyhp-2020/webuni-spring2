@@ -1,6 +1,7 @@
 package hu.webuni.student.web;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -170,6 +171,15 @@ public class CourseController implements CourseControllerApi {
 	public ResponseEntity<List<GetAvgOfSemesterOfStudents200ResponseInner>> getAvgOfSemesterOfStudents() {
 		List<GetAvgOfSemesterOfStudents200ResponseInner> results = oaDataMapper.objsToInners(courseRepository.findAverageOfSemesterOfStudents());
 		return ResponseEntity.ok(results);
+	}
+
+	@Override
+	public ResponseEntity<CourseDto> getVersionAt(Long id, @Valid LocalDateTime at) {
+		return ResponseEntity.ok(
+				courseMapper.courseToDto(
+					courseService.getVersionAt(id, at)
+				)
+			);
 	}
 
 }
