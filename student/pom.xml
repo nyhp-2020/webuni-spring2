@@ -188,6 +188,7 @@
 							<configOptions>
 								<useTags>true</useTags>
 								<dateLibrary>java8-localdatetime</dateLibrary>
+<!--								<dateLibrary>java8-datetime</dateLibrary>-->
 								<configPackage>hu.webuni.student.api.config</configPackage>
 								<interfaceOnly>true</interfaceOnly>
 							</configOptions>

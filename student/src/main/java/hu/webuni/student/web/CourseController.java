@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
@@ -148,7 +149,7 @@ public class CourseController implements CourseControllerApi {
 	@Override
 	public ResponseEntity<List<CourseDto>> searchCourses2(@Valid Boolean full, @Valid Integer page, @Valid Integer size,
 			@Valid String sort, @Valid Long id, @Valid String name, @Valid Long studentsId, @Valid String teachersName,
-			@Valid List<Object> studentsSemester) {
+			@Valid List<String> studentsSemester) {
 
 		boolean isFull = full == null ? false : full;
 		boolean isSummaryNeeded = !isFull;
@@ -174,12 +175,14 @@ public class CourseController implements CourseControllerApi {
 	}
 
 	@Override
-	public ResponseEntity<CourseDto> getVersionAt(Long id, @Valid LocalDateTime at) {
-		return ResponseEntity.ok(
-				courseMapper.courseToDto(
-					courseService.getVersionAt(id, at)
-				)
-			);
+	public ResponseEntity<CourseDto> getVersionAt(@NotNull @Valid LocalDateTime at, Long id) {
+		return ResponseEntity.ok(courseMapper.courseToDto(courseService.getVersionAt(id, at)));
 	}
 
+//	@Override
+//	public ResponseEntity<CourseDto> getVersionAt(@NotNull @Valid OffsetDateTime at, Long id) {
+//		return ResponseEntity.ok(courseMapper.courseToDto(courseService.getVersionAt(id, at)));
+//	}
+
+	
 }

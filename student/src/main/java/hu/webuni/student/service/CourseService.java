@@ -1,6 +1,8 @@
 package hu.webuni.student.service;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -136,8 +138,11 @@ public class CourseService {
 	
 	@Transactional
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Course getVersionAt(long id, OffsetDateTime when) {
-
+//	public Course getVersionAt(long id, OffsetDateTime when) {
+	public Course getVersionAt(long id, LocalDateTime time) {
+		ZoneOffset offset = ZoneOffset.UTC;
+		OffsetDateTime when = time.atOffset(offset);
+		
 		long epochMillis = when.toInstant().toEpochMilli();
 		
 		List resultList = AuditReaderFactory.get(em)

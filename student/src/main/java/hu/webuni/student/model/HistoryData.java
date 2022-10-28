@@ -17,4 +17,5 @@ public class HistoryData<T> {
 	private RevisionType revType;
 	private int revision;
 	private Date date;
+//	private OffsetDateTime date;
 }
