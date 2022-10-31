@@ -48,7 +48,7 @@ public interface CourseRepository extends
 	@Query("SELECT c FROM Course c")
 	List<Course>findAllWithStudents();
 	
-	@Query("SELECT c.id, AVG(s.semester) FROM Course c LEFT JOIN c.students s GROUP BY c")
+	@Query("SELECT c.id as courseId, AVG(s.semester) as averageSemesterOfStudents FROM Course c LEFT JOIN c.students s GROUP BY c")
 	List<CourseAvgDat>findAverageOfSemesterOfStudents();
 
 

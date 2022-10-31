@@ -242,6 +242,73 @@ paths:
           in: query
           name: at
           required: true
+  '/api/students/{id}/profile':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - student-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                properties: {}
+            application/json:
+              schema:
+                type: string
+      operationId: getProfilePicture
+      parameters: []
+    post:
+      summary: ''
+      operationId: uploadProfilePicture
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  format: binary
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          text/html:
+            schema:
+              type: object
+              properties: {}
+          application/pdf:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  format: binary
+        description: ''
+      tags:
+        - student-controller
+    delete:
+      summary: ''
+      tags:
+        - student-controller
+      operationId: deleteProfilePicture
+      responses:
+        '200':
+          description: OK
 components:
   schemas:
     CourseDto:

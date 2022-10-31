@@ -53,5 +53,8 @@ public class Course {
 //	@OneToMany(mappedBy = "course"
 	@ManyToMany
 	private Set<Teacher> teachers;
+	
+//	@OneToMany(mappedBy = "course"
+//	Set<Timetable> timetables;
 
 }

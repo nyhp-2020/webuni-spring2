@@ -1,13 +1,25 @@
 package hu.webuni.student.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.student.model.Student;
 import hu.webuni.student.repository.StudentRepository;
@@ -23,6 +35,19 @@ public class StudentService {
 	private final SemesterService semesterService;
 	
 	private final StudentRepository studentRepository;
+	
+	@Value("${student.content.profilePics}")
+	private String profilePicsFolder;
+	
+	@PostConstruct
+	public void init() {
+		try {
+			Files.createDirectories(Path.of(profilePicsFolder));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 	
 	public List<Student> findAll(){
 		return studentRepository.findAll();
@@ -52,7 +77,7 @@ public class StudentService {
 	
 	
 //	@Scheduled(cron = "*/10 * * * * *")
-	@Scheduled(cron = "${student.scheduled.cronparam}")
+//	@Scheduled(cron = "${student.scheduled.cronparam}")
 	public void updateUsedFreeSemesters() {
 		System.out.println("updateUsedFreeSemesters called");
 		studentRepository.findAll().forEach(s -> {
@@ -72,4 +97,37 @@ public class StudentService {
 		studentRepository.save(s);	
 	}
 
+	private Path getProfilePicPathForStudent(Long id) {
+		return Paths.get(profilePicsFolder, id.toString() + ".jpg");
+	}
+	
+	public void saveProfilePicture(Long id, InputStream is) {
+		if(!studentRepository.existsById(id))
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		try {
+			Files.copy(is, getProfilePicPathForStudent(id), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Resource getProfilePicture(Long studentId) {
+		FileSystemResource fileSystemResource = new FileSystemResource(getProfilePicPathForStudent(studentId));
+		if(!fileSystemResource.exists())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		return fileSystemResource;
+	}
+	
+	public void deleteProfilePicture(Long studentId) {
+//		FileSystemResource fileSystemResource = new FileSystemResource(getProfilePicPathForStudent(studentId));
+//		if(!fileSystemResource.exists())
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		try {
+			Files.delete(getProfilePicPathForStudent(studentId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 }
