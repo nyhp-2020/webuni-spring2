@@ -1,6 +1,8 @@
 package hu.webuni.student.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -11,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import hu.webuni.student.model.Course;
 import hu.webuni.student.model.Student;
 import hu.webuni.student.model.Teacher;
+import hu.webuni.student.model.Timetable;
 import hu.webuni.student.repository.CourseRepository;
 import hu.webuni.student.repository.StudentRepository;
 import hu.webuni.student.repository.TeacherRepository;
+import hu.webuni.student.repository.TimetableRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class InitDbService {
 	
 	private final StudentRepository studentRepository;
 	private final TeacherRepository teacherRepository;
+	private final TimetableRepository timetableRepository;
 	private final CourseRepository courseRepository;
 	private final JdbcTemplate jdbcTemplate;
 	
@@ -72,15 +77,25 @@ public class InitDbService {
 //				.students(Set.copyOf(Arrays.asList(student1, student2)))
 //				.teachers(Set.copyOf(Arrays.asList(teacher1, teacher4))).build();
 		
-		Course course1 = new Course(0,"Matematika",Set.copyOf(Arrays.asList(student1, student2)),Set.copyOf(Arrays.asList(teacher1, teacher4)));
-		Course course2 = new Course(0,"Fizika",Set.copyOf(Arrays.asList(student1, student2, student3)),Set.copyOf(Arrays.asList(teacher1, teacher3)));
-		Course course3 = new Course(0,"Kémia",Set.copyOf(Arrays.asList(student4)),Set.copyOf(Arrays.asList(teacher2)));
-		Course course4 = new Course(0,"Informatika",Set.copyOf(Arrays.asList(student3, student4)),Set.copyOf(Arrays.asList(teacher1, teacher3)));
+		Timetable timetable1 = new Timetable(0,DayOfWeek.MONDAY,LocalTime.of(8, 0),LocalTime.of(9, 0),null);
+		Timetable timetable2 = new Timetable(0,DayOfWeek.TUESDAY,LocalTime.of(8, 0),LocalTime.of(9, 0),null);
+		Timetable timetable3 = new Timetable(0,DayOfWeek.WEDNESDAY,LocalTime.of(8, 0),LocalTime.of(9, 0),null);
+		Timetable timetable4 = new Timetable(0,DayOfWeek.THURSDAY,LocalTime.of(8, 0),LocalTime.of(9, 0),null);
 		
-		courseRepository.save(course1);
-		courseRepository.save(course2);
-		courseRepository.save(course3);
-		courseRepository.save(course4);
+		Course course1 = new Course(0,"Matematika",Set.copyOf(Arrays.asList(student1, student2)),Set.copyOf(Arrays.asList(teacher1, teacher4)),Set.copyOf(Arrays.asList(timetable1)));
+		Course course2 = new Course(0,"Fizika",Set.copyOf(Arrays.asList(student1, student2, student3)),Set.copyOf(Arrays.asList(teacher1, teacher3)),Set.copyOf(Arrays.asList(timetable2)));
+		Course course3 = new Course(0,"Kémia",Set.copyOf(Arrays.asList(student4)),Set.copyOf(Arrays.asList(teacher2)),Set.copyOf(Arrays.asList(timetable3)));
+		Course course4 = new Course(0,"Informatika",Set.copyOf(Arrays.asList(student3, student4)),Set.copyOf(Arrays.asList(teacher1, teacher3)),Set.copyOf(Arrays.asList(timetable4)));
+		
+		timetable1.setCourse(courseRepository.save(course1));
+		timetable2.setCourse(courseRepository.save(course2));
+		timetable3.setCourse(courseRepository.save(course3));
+		timetable4.setCourse(courseRepository.save(course4));
+		
+		timetableRepository.save(timetable1);
+		timetableRepository.save(timetable2);
+		timetableRepository.save(timetable3);
+		timetableRepository.save(timetable4);
 		
 	}
 	
@@ -89,6 +104,7 @@ public class InitDbService {
 		courseRepository.deleteAll();
 		studentRepository.deleteAll();
 		teacherRepository.deleteAll();
+		timetableRepository.deleteAll();
 	}
 	
 	@Transactional
@@ -98,6 +114,7 @@ public class InitDbService {
 		jdbcTemplate.update("DELETE FROM teacher_aud");
 		jdbcTemplate.update("DELETE FROM course_students_aud");
 		jdbcTemplate.update("DELETE FROM course_teachers_aud");
+		jdbcTemplate.update("DELETE FROM timetable_aud");
 	}
 	
 

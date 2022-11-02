@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 
@@ -50,11 +51,11 @@ public class Course {
 	@ManyToMany
 	private Set<Student> students;
 	
-//	@OneToMany(mappedBy = "course"
+//	@OneToMany(mappedBy = "course")
 	@ManyToMany
 	private Set<Teacher> teachers;
 	
-//	@OneToMany(mappedBy = "course"
-//	Set<Timetable> timetables;
+	@OneToMany(mappedBy = "course")
+	Set<Timetable> timetables;
 
 }
