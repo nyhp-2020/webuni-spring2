@@ -23,4 +23,19 @@ public class DelayService {
 		return random.nextInt(0, 1800);
 //		return CompletableFuture.completedFuture(random.nextInt(0, 1800));
 	}
+	
+	
+	@Async
+//	public int getDelayAsync(long flightId) {
+	public CompletableFuture<Integer> getDelayAsync(long flightId) {
+			System.out.println("DelayService.getDelay called at thread " + Thread.currentThread().getName());
+
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+			}
+//			return random.nextInt(0, 1800);
+			return CompletableFuture.completedFuture(random.nextInt(0, 1800));
+		}
+	
 }
