@@ -11,6 +11,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -39,6 +40,7 @@ public class FlightController implements FlightControllerApi{
 	private final QuerydslPredicateArgumentResolver prediacateResolver;
 	
 	private final SimpMessagingTemplate messagingTemplate;
+	private final JmsTemplate jmsTemplate;
 	
 	@Override
 	public Optional<NativeWebRequest> getRequest() {
@@ -94,7 +96,12 @@ public class FlightController implements FlightControllerApi{
 
 	@Override
 	public ResponseEntity<Void> reportDelay(Long id, Integer delay) {
-		this.messagingTemplate.convertAndSend("/topic/delay/" + id, new DelayMessage(delay,OffsetDateTime.now()));
+//		DelayMessage payload = new DelayMessage(delay,OffsetDateTime.now());
+		DelayMessage payload = new DelayMessage(delay,OffsetDateTime.now(), id);
+		this.messagingTemplate.convertAndSend("/topic/delay/" + id, payload);
+		
+		this.jmsTemplate.convertAndSend("delays", payload);
+		
 		return ResponseEntity.ok().build();
 	}
 	
