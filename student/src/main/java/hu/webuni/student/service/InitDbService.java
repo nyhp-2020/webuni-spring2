@@ -101,10 +101,10 @@ public class InitDbService {
 	
 	@Transactional
 	public void deleteDB() {
-		courseRepository.deleteAll();
 		studentRepository.deleteAll();
 		teacherRepository.deleteAll();
 		timetableRepository.deleteAll();
+		courseRepository.deleteAll();
 	}
 	
 	@Transactional

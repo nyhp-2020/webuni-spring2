@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,6 +34,8 @@ public class Timetable {
 	@Id
 	@GeneratedValue
 	private long id;
+	
+	@Convert(converter = DayOfWeekToIntegerConverter.class)
 	private DayOfWeek dayOfWeek;
 	private LocalTime startTime;
 	private LocalTime endTime;
