@@ -63,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/api/airports/**").hasAuthority("admin")
 			.antMatchers(HttpMethod.PUT, "/api/airports/**").hasAnyAuthority("user", "admin")
 			.anyRequest().authenticated()
-//			.and()
-//			.oauth2Login()
-//			.defaultSuccessUrl("/fbLoginSuccess", true)
+			.and()
+			.oauth2Login()
+			.defaultSuccessUrl("/fbLoginSuccess", true)
 			;
 		
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
