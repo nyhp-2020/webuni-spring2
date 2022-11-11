@@ -120,6 +120,12 @@
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>0.2.3</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.3.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -197,6 +203,28 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The name of your generated source package -->
+					<packageName>hu.webuni.student.wsclient</packageName>
+					<wsdlUrls>
+						<wsdlUrl>http://localhost:8081/services/central?wsdl</wsdlUrl>
+					</wsdlUrls>
+					<bindingDirectory>${basedir}/wsdl</bindingDirectory>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>

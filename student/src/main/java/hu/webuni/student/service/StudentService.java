@@ -32,9 +32,11 @@ public class StudentService {
 //	@Value("${student.scheduled.cronparam}")
 //	private String cronparam;
 	
-	private final SemesterService semesterService;
+//	private final SemesterService semesterService;
 	
 	private final StudentRepository studentRepository;
+	
+	private final CentralService centralService;
 	
 	@Value("${student.content.profilePics}")
 	private String profilePicsFolder;
@@ -77,7 +79,7 @@ public class StudentService {
 	
 	
 //	@Scheduled(cron = "*/10 * * * * *")
-//	@Scheduled(cron = "${student.scheduled.cronparam}")
+	@Scheduled(cron = "${student.scheduled.cronparam}")
 	public void updateUsedFreeSemesters() {
 		System.out.println("updateUsedFreeSemesters called");
 		studentRepository.findAll().forEach(s -> {
@@ -88,10 +90,12 @@ public class StudentService {
 	private void updateStudentWithUsedFreeSemesters(Student s) {
 		int usedFreeSemesters = 0;
 		try {
-			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
+			usedFreeSemesters = centralService.getNumFreeSemestersForStudent(s.getCid());
+//			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
 //			usedFreeSemesters = semesterService.getUsedFreeSemesters(0);
 		} catch (Exception e) {
-			System.out.println("Exception occured");
+//			System.out.println("Exception occured");
+			System.out.println(e.toString());
 		}
 		s.setUfsc(usedFreeSemesters);
 		studentRepository.save(s);	
