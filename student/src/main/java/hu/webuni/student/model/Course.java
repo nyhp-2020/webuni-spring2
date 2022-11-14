@@ -1,5 +1,6 @@
 package hu.webuni.student.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -30,12 +31,8 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@NamedEntityGraph(
-		name = "Course.students",
-		attributeNodes = @NamedAttributeNode("students"))
-@NamedEntityGraph(
-		name = "Course.teachers",
-		attributeNodes = @NamedAttributeNode("teachers"))
+@NamedEntityGraph(name = "Course.students", attributeNodes = @NamedAttributeNode("students"))
+@NamedEntityGraph(name = "Course.teachers", attributeNodes = @NamedAttributeNode("teachers"))
 @Audited
 public class Course {
 	@Id
@@ -43,19 +40,27 @@ public class Course {
 	@EqualsAndHashCode.Include()
 	@ToString.Include
 	private long id;
-	
+
 	@ToString.Include
 	private String name;
-	
+
 //	@OneToMany(mappedBy = "course")
 	@ManyToMany
 	private Set<Student> students;
-	
+
 //	@OneToMany(mappedBy = "course")
 	@ManyToMany
 	private Set<Teacher> teachers;
-	
-	@OneToMany(mappedBy = "course")
-	Set<Timetable> timetables;
 
+	@OneToMany(mappedBy = "course")
+	private Set<Timetable> timetables;
+
+	private Semester semester;
+
+	public void addTimeTable(Timetable timeTable) {
+		timeTable.setCourse(this);
+		if (this.timetables == null)
+			this.timetables = new HashSet<>();
+		this.timetables.add(timeTable);
+	}
 }

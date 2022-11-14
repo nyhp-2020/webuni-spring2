@@ -15,14 +15,14 @@ public class RetryAspect {
 
 //	@Around("execution(* hu.webuni.student.service.SemesterService.getUsedFreeSemesters(..))")
 	@Around("hu.webuni.student.aspect.RetryAspect.annotationRetryCall()")
-	public void retryWhenException(ProceedingJoinPoint joinPoint) throws Throwable {
+	public Object retryWhenException(ProceedingJoinPoint joinPoint) throws Throwable {
 		Exception ex = null;
 		int maxret = 5;
 		int waitmillis=500;
 		for (int i = 1; i <= maxret; i++) {
 			try {
-				joinPoint.proceed();
-				return;
+				return joinPoint.proceed();
+//				return;
 
 			} catch (Exception e) {
 				ex = e;

@@ -1,6 +1,7 @@
 package hu.webuni.student.web;
 
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -50,6 +52,8 @@ public class CourseController implements CourseControllerApi {
 
 	private final PageableHandlerMethodArgumentResolver pageableResolver;
 	private final QuerydslPredicateArgumentResolver prediacateResolver;
+	
+	private final SimpMessagingTemplate simpMessagingTemplate;
 	
 	@Override
 	public Optional<NativeWebRequest> getRequest() {
@@ -169,6 +173,15 @@ public class CourseController implements CourseControllerApi {
 	@Override
 	public ResponseEntity<CourseDto> getVersionAt(@NotNull @Valid LocalDateTime at, Long id) {
 		return ResponseEntity.ok(courseMapper.courseToDto(courseService.getVersionAt(id, at)));
+	}
+
+	@Override
+	public ResponseEntity<Void> cancelLesson(Integer courseId, LocalDate day) {
+		Course course = courseRepository.findById((long)courseId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		simpMessagingTemplate.convertAndSend("/topic/courseChat/" + course.getId(),
+				String.format("A %s kurzus %s napon elmarad.", course.getName(), day));
+		
+		return ResponseEntity.ok().build();
 	}
 
 //	@Override

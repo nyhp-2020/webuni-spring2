@@ -79,7 +79,7 @@ public class StudentService {
 	
 	
 //	@Scheduled(cron = "*/10 * * * * *")
-	@Scheduled(cron = "${student.scheduled.cronparam}")
+//	@Scheduled(cron = "${student.scheduled.cronparam}")
 	public void updateUsedFreeSemesters() {
 		System.out.println("updateUsedFreeSemesters called");
 		studentRepository.findAll().forEach(s -> {

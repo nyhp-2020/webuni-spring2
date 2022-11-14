@@ -41,5 +41,5 @@ public class Timetable {
 	private LocalTime endTime;
 
 	@ManyToOne
-	Course course;
+	private Course course;
 }
