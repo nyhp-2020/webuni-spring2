@@ -89,6 +89,7 @@ public class InitDbService {
 		addNewTimeTable(course4, DayOfWeek.FRIDAY, "08:15", "09:45");
 		
 		saveSpecialDay("2022-04-18", null);
+		saveSpecialDay("2022-04-20", null);
 		saveSpecialDay("2022-03-15", null);
 		saveSpecialDay("2022-03-14", "2022-03-26");
 		

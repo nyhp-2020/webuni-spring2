@@ -16,4 +16,10 @@ public interface TimetableRepository extends JpaRepository<Timetable, Long>{
 			+ ")")
 	List<Timetable> findByStudentAndSemester(long studentId, int year, SemesterType semesterType);
 
+	@Query("SELECT t FROM Timetable t WHERE t.course IN ("
+			+	"SELECT c FROM Course c JOIN c.teachers tr "
+			+ 	"WHERE tr.id=:teacherId AND c.semester.year = :year AND c.semester.semesterType = :semesterType"
+			+ ")")
+	List<Timetable> findByTeacherAndSemester(long teacherId, int year, SemesterType semesterType);
+
 }

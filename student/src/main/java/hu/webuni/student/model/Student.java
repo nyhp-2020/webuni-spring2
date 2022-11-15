@@ -49,4 +49,6 @@ public class Student {
 	
 	private long cid; //central id
 	private int ufsc; //used_free_semesters_count
+	
+	private int balance;
 }

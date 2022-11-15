@@ -134,4 +134,9 @@ public class StudentService {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@Transactional
+	public void updateBalance(long studentId, int amount) {
+		studentRepository.findById(studentId).ifPresent(s -> s.setBalance(s.getBalance() + amount));
+	}
 }

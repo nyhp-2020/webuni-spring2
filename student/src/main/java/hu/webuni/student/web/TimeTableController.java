@@ -22,22 +22,24 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class TimeTableController implements TimeTableControllerApi{
+public class TimeTableController implements TimeTableControllerApi {
 
 	private final TimeTableService timeTableService;
 	private final TimeTableMapper timeTableMapper;
-	
+
 	@Override
 	public ResponseEntity<List<TimetableDto>> getApiTimetable(@Valid Long studentId, @Valid Long teacherId,
 			@Valid LocalDate from, @Valid LocalDate until) {
 
+		ArrayList<TimetableDto> result = new ArrayList<>();
+
 		try {
 			if (studentId != null) {
-				ArrayList<TimetableDto> result = new ArrayList<>();
-				
-				Map<LocalDate, List<Timetable>> timeTableForStudent = timeTableService
-						.getTimeTableForStudent(studentId, from, until);
-				
+//				ArrayList<TimetableDto> result = new ArrayList<>();
+
+				Map<LocalDate, List<Timetable>> timeTableForStudent = timeTableService.getTimeTableForStudent(studentId,
+						from, until);
+
 				for (Map.Entry<LocalDate, List<Timetable>> entry : timeTableForStudent.entrySet()) {
 					LocalDate day = entry.getKey();
 					List<Timetable> items = entry.getValue();
@@ -46,11 +48,26 @@ public class TimeTableController implements TimeTableControllerApi{
 					result.addAll(itemDtos);
 				}
 				return ResponseEntity.ok(result);
-			} 
-			//TODO: similar for teacher
-			
-			else
-				return ResponseEntity.badRequest().build();
+			}
+			// TODO: similar for teacher
+			if (teacherId != null) {
+//				ArrayList<TimetableDto> result = new ArrayList<>();
+
+				Map<LocalDate, List<Timetable>> timeTableForTeacher = timeTableService.getTimeTableForTeacher(teacherId,
+						from, until);
+
+				for (Map.Entry<LocalDate, List<Timetable>> entry : timeTableForTeacher.entrySet()) {
+					LocalDate day = entry.getKey();
+					List<Timetable> items = entry.getValue();
+					List<TimetableDto> itemDtos = timeTableMapper.timetablesToDtos(items);
+					itemDtos.forEach(i -> i.setDay(day));
+					result.addAll(itemDtos);
+				}
+				return ResponseEntity.ok(result);
+			}
+
+//			else
+			return ResponseEntity.badRequest().build();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
@@ -60,19 +77,28 @@ public class TimeTableController implements TimeTableControllerApi{
 	@Override
 	public ResponseEntity<TimetableDto> getApiTimetableSearch(@Valid Long studentId, @Valid Long teacherId,
 			@Valid LocalDate from, @Valid String course) {
+		Entry<LocalDate, Timetable> foundTimeTableEntry = null;
+		if (studentId != null) {
+			foundTimeTableEntry = timeTableService.searchTimeTableOfStudent(studentId, from,
+					course);
+			if (foundTimeTableEntry == null)
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 		
-		Entry<LocalDate, Timetable> foundTimeTableEntry = timeTableService.searchTimeTableOfStudent(studentId, from, course);
-		if(foundTimeTableEntry == null)	
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		if (teacherId != null && foundTimeTableEntry == null) {
+			foundTimeTableEntry = timeTableService.searchTimeTableOfTeacher(teacherId, from,
+					course);
+			if (foundTimeTableEntry == null)
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 		
+		if(foundTimeTableEntry == null)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
 		TimetableDto timeTableItemDto = timeTableMapper.timeTableItemToDto(foundTimeTableEntry.getValue());
 		timeTableItemDto.setDay(foundTimeTableEntry.getKey());
-		
+
 		return ResponseEntity.ok(timeTableItemDto);
 	}
-
-
-	
 
 }
