@@ -8,8 +8,10 @@ create table course_teachers_aud (rev int4 not null, courses_id int8 not null, t
 create table revinfo (rev int4 not null, revtstmp int8, primary key (rev));
 create table special_day_aud (id int4 not null, rev int4 not null, revtype int2, source_day date, target_day date, primary key (id, rev));
 create table special_day (id int4 not null, source_day date, target_day date, primary key (id));
-create table student (id int8 not null, birthdate date, cid int8 not null, name varchar(255), semester int4 not null, ufsc int4 not null, primary key (id));
-create table student_aud (id int8 not null, rev int4 not null, revtype int2, birthdate date, cid int8, name varchar(255), semester int4, ufsc int4, primary key (id, rev));
+create table student (id int8 not null, balance int4 not null, birthdate date, cid int8 not null, name varchar(255), semester int4 not null, ufsc int4 not null, primary key (id));
+create table student_aud (id int8 not null, rev int4 not null, revtype int2, balance int4, birthdate date, cid int8, name varchar(255), semester int4, ufsc int4, primary key (id, rev));
+create table student_user (username varchar(255) not null, facebook_id varchar(255), password varchar(255), primary key (username));
+create table student_user_roles (student_user_username varchar(255) not null, roles varchar(255));
 create table teacher (id int8 not null, birthdate date, name varchar(255), primary key (id));
 create table teacher_aud (id int8 not null, rev int4 not null, revtype int2, birthdate date, name varchar(255), primary key (id, rev));
 create table timetable (id int8 not null, day_of_week int4, end_time time, start_time time, course_id int8, primary key (id));
@@ -23,6 +25,7 @@ alter table if exists course_teachers add constraint FK5ntgqv47cbgq8s0la1myeg5ly
 alter table if exists course_teachers_aud add constraint FKhxsr1pho67e2es9pv4v0js9l9 foreign key (rev) references revinfo;
 alter table if exists special_day_aud add constraint FKke1jl33xwvveiw7wvsmupf177 foreign key (rev) references revinfo;
 alter table if exists student_aud add constraint FKj009xm0wjydklskl2dgnfyyjq foreign key (rev) references revinfo;
+alter table if exists student_user_roles add constraint FKciq0uu7ofpj8a3ax40eghkj9v foreign key (student_user_username) references student_user;
 alter table if exists teacher_aud add constraint FKsg6tnk689ja9qg8qhnyarygx5 foreign key (rev) references revinfo;
 alter table if exists timetable add constraint FKrdljqbhvm52vnxoy3xapbkho0 foreign key (course_id) references course;
 alter table if exists timetable_aud add constraint FK2dn7jd07tn6j62sygvaba54k0 foreign key (rev) references revinfo;

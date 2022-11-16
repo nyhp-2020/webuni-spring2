@@ -6,8 +6,10 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ import hu.webuni.student.model.Semester;
 import hu.webuni.student.model.Semester.SemesterType;
 import hu.webuni.student.model.SpecialDay;
 import hu.webuni.student.model.Student;
+import hu.webuni.student.model.StudentUser;
 import hu.webuni.student.model.Teacher;
 import hu.webuni.student.model.Timetable;
 import hu.webuni.student.repository.CourseRepository;
@@ -23,6 +26,7 @@ import hu.webuni.student.repository.SpecialDayRepository;
 import hu.webuni.student.repository.StudentRepository;
 import hu.webuni.student.repository.TeacherRepository;
 import hu.webuni.student.repository.TimetableRepository;
+import hu.webuni.student.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -35,6 +39,9 @@ public class InitDbService {
 	private final CourseRepository courseRepository;
 	private final SpecialDayRepository specialDayRepository;
 	private final JdbcTemplate jdbcTemplate;
+	
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Transactional
 	public void addInitData() {
@@ -106,6 +113,7 @@ public class InitDbService {
 		System.out.format("Student ids: %d, %d, %d, %d%n",
 		student1.getId(), student2.getId(), student3.getId(),student4.getId());
 		
+		createUsers();
 	}
 	
 	private void saveSpecialDay(String sourceDay, String targetDay) {
@@ -163,6 +171,15 @@ public class InitDbService {
 		jdbcTemplate.update("DELETE FROM revinfo");
 	}
 	
-
+	@Transactional
+	public void createUsers() {
+		if(!userRepository.existsById("admin")) {
+			userRepository.save(new StudentUser("admin", passwordEncoder.encode("pass"), Set.of("admin", "user")));
+		}
+		
+		if(!userRepository.existsById("user")) {
+			userRepository.save(new StudentUser("user", passwordEncoder.encode("pass"), Set.of("user")));
+		}
+	}
 
 }
