@@ -34,10 +34,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
+		
 		filterChain.doFilter(request, response); // kérés és válasz továbbengedése
 	}
 
-	public static UsernamePasswordAuthenticationToken createUserDetailsFromAuthHeader(String authHeader, JwtService jwtService) {
+	
+
+	public static UsernamePasswordAuthenticationToken createUserDetailsFromAuthHeader(String authHeader,
+			JwtService jwtService) {
 		if (authHeader != null && authHeader.startsWith(BEARER)) {
 			String jwtToken = authHeader.substring(BEARER.length());
 			UserDetails principal = jwtService.parseJwt(jwtToken);
@@ -48,6 +52,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		}
 		return null;
 	}
-
 
 }

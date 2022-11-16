@@ -19,7 +19,7 @@ public class JwtService {
 
 	private static final String AUTH = "auth";
 	private Algorithm alg = Algorithm.HMAC256("mysecret");
-	private String issuer = "AirportApp";
+	private String issuer = "StudentApp";
 	
 	public String creatJwtToken(UserDetails principal) {
 		return JWT.create()

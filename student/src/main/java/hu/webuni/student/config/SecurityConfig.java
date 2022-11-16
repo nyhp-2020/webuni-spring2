@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //			.antMatchers("/oauth2/**").permitAll()
 //			.antMatchers("/fbLoginSuccess").permitAll()
 			.antMatchers("/api/login/**").permitAll()
-//			.antMatchers("/api/stomp/**").permitAll()
+			.antMatchers("/api/stomp/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/students/**").hasAuthority("admin")
 			.antMatchers(HttpMethod.PUT, "/api/students/**").hasAnyAuthority("user", "admin")
 			.anyRequest().authenticated()
