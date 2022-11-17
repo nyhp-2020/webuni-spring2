@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class FacebookLoginController {
 	
 	private final UserService userService;
-	;
+
 	@RequestMapping("/fbLoginSuccess")
 	public String onFacebookLoginSuccess(Map<String,Object> model,OAuth2AuthenticationToken authenticationToken,
 			@AuthenticationPrincipal OAuth2User principal) {
