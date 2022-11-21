@@ -14,38 +14,40 @@ import org.hibernate.envers.Audited;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(onlyExplicitlyIncluded = true)
-@Entity
-@Cacheable
 @Audited
-public class Teacher {
+@Entity
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(onlyExplicitlyIncluded = true)
+public class Teacher extends UniversityUser{
 	
-	@Id
-	@GeneratedValue
-	@EqualsAndHashCode.Include()
-	@ToString.Include
-	private long id;
+//	@Id
+//	@GeneratedValue
+//	@EqualsAndHashCode.Include()
+//	@ToString.Include
+//	private long id;
+//	
+//	@ToString.Include
+//	private String name;
+//	private LocalDate birthdate;
 	
-	@ToString.Include
-	private String name;
-	private LocalDate birthdate;
-	
-//	@ManyToOne	
-//	private Course course;
 	
 	@ManyToMany(mappedBy = "teachers")
 	private Set<Course> courses;
 
+	@Override
+	public UserType getUserType() {
+		return UserType.TEACHER;
+	}
 }

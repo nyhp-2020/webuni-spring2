@@ -54,9 +54,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 						
 						StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 						if(StompCommand.CONNECT.equals(accessor.getCommand())) {
-							List<String> authHeaders = accessor.getNativeHeader("X-Authorization");
 							
-							UsernamePasswordAuthenticationToken authentication = JwtAuthFilter.createUserDetailsFromAuthHeader(authHeaders.get(0), jwtService);
+							String authHeader = accessor.getFirstNativeHeader("X-Authorization");
+							UsernamePasswordAuthenticationToken authentication = JwtAuthFilter.createUserDetailsFromAuthHeader(authHeader, jwtService);
+
+//							List<String> authHeaders = accessor.getNativeHeader("X-Authorization");
+//							UsernamePasswordAuthenticationToken authentication = JwtAuthFilter.createUserDetailsFromAuthHeader(authHeaders.get(0), jwtService);
 							accessor.setUser(authentication);
 						}
 						return message;

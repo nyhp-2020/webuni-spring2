@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import hu.webuni.student.model.StudentUser;
-import hu.webuni.student.repository.UserRepository;
+import hu.webuni.student.repository.StudentUserRepository;
 
 
 
@@ -19,11 +19,11 @@ import hu.webuni.student.repository.UserRepository;
 public class StudentUserDetailsService implements UserDetailsService{
 
 	@Autowired
-	UserRepository userRepository;
-
+	StudentUserRepository studentUserRepository;
+ 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		StudentUser studentUser = userRepository.findById(username)
+		StudentUser studentUser = studentUserRepository.findById(username)
 				.orElseThrow(()-> new UsernameNotFoundException(username));
 		
 		

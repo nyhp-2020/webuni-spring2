@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import hu.webuni.student.model.StudentUser;
-import hu.webuni.student.repository.UserRepository;
+import hu.webuni.student.repository.StudentUserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	
 	private final OAuth2AuthorizedClientService authClientService;
-	private final UserRepository userRepository;
+	private final StudentUserRepository studentUserRepository;
 
 	public void registerNewUserIfNeeded(OAuth2AuthenticationToken authenticationToken) {
 		
@@ -36,11 +36,11 @@ public class UserService {
 		OAuth2AuthorizedClient client = authClientService.loadAuthorizedClient(authorizedClientRegistrationId, userId);
 		System.out.println("access token:" + client.getAccessToken().getTokenValue());
 		
-		Optional<StudentUser> optionalExsistingUser = userRepository.findByFacebookId(userId);
+		Optional<StudentUser> optionalExsistingUser = studentUserRepository.findByFacebookId(userId);
 		if(optionalExsistingUser.isEmpty()) {
 			StudentUser newUser = new StudentUser(email.toString(),"",Set.of("user"));
 			newUser.setFacebookId(userId);
-			userRepository.save(newUser);
+			studentUserRepository.save(newUser);
 		}
 	}
 
