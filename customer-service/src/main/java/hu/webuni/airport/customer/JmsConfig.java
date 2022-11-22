@@ -33,7 +33,7 @@ public class JmsConfig {
 		((SingleConnectionFactory)connectionFactory).setClientId("customer-service");
 		configurer.configure(factory, connectionFactory);
 		factory.setSubscriptionDurable(true);
-		factory.setClientId("customer-service");
+//		factory.setClientId("customer-service");
 		return factory;
 	}//Durable Subscription
 }
