@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +24,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.student.model.Student;
 import hu.webuni.student.repository.StudentRepository;
+import hu.webuni.student.ws.GetFreeSemestersMessage;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class StudentService {
+	
+	public String GET_TOPIC = "getSemesters";
+	public String RESPONSE_TOPIC = "freeSemesters";
 	
 //	@Value("${student.scheduled.cronparam}")
 //	private String cronparam;
@@ -37,6 +42,8 @@ public class StudentService {
 	private final StudentRepository studentRepository;
 	
 	private final CentralService centralService;
+	
+	private final JmsTemplate jmsTemplate;
 	
 	@Value("${student.content.profilePics}")
 	private String profilePicsFolder;
@@ -88,17 +95,27 @@ public class StudentService {
 	}
 
 	private void updateStudentWithUsedFreeSemesters(Student s) {
-		int usedFreeSemesters = 0;
-		try {
-			usedFreeSemesters = centralService.getNumFreeSemestersForStudent(s.getCid());
-//			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
-//			usedFreeSemesters = semesterService.getUsedFreeSemesters(0);
-		} catch (Exception e) {
-//			System.out.println("Exception occured");
-			System.out.println(e.toString());
-		}
-		s.setUfsc(usedFreeSemesters);
-		studentRepository.save(s);	
+//		int usedFreeSemesters = 0;
+//		try {
+//			usedFreeSemesters = centralService.getNumFreeSemestersForStudent(s.getCid()); //direct call
+//
+//			//			usedFreeSemesters = semesterService.getUsedFreeSemesters(s.getCid());
+////			usedFreeSemesters = semesterService.getUsedFreeSemesters(0);
+//		} catch (Exception e) {
+////			System.out.println("Exception occured");
+//			System.out.println(e.toString());
+//		}
+//		s.setUfsc(usedFreeSemesters);
+//		studentRepository.save(s);
+		
+		//Sending message instead of direct call
+		GetFreeSemestersMessage getMessage = new GetFreeSemestersMessage();
+		getMessage.setId(s.getId());
+		getMessage.setCid(s.getCid());
+//		getMessage.setReplyTo("freeSemesters");
+		getMessage.setReplyTo(RESPONSE_TOPIC);
+//		this.jmsTemplate.convertAndSend("getSemesters", getMessage);
+		this.jmsTemplate.convertAndSend(GET_TOPIC, getMessage);
 	}
 
 	private Path getProfilePicPathForStudent(Long id) {

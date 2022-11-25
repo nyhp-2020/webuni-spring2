@@ -45,6 +45,8 @@ public class InitDbService {
 	private final StudentUserRepository studentUserRepository;
 	private final PasswordEncoder passwordEncoder;
 	
+	private final StudentService studentService;
+	
 	@Transactional
 	public void addInitData() {
 
@@ -82,6 +84,8 @@ public class InitDbService {
 		student1.getId(), student2.getId(), student3.getId());
 		
 		createUsers();
+		
+		studentService.updateUsedFreeSemesters();
 	}
 	
 	private Student saveNewStudent(String name, LocalDate birthdate, int semester, int cid, String username, String pass) {
