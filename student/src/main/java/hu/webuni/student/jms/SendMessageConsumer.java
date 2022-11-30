@@ -14,18 +14,23 @@ import lombok.RequiredArgsConstructor;
 public class SendMessageConsumer {
 	
 
-	private final StudentRepository studentRepository;
+//	private final StudentRepository studentRepository;
+	
+	private final StudentService studentService;
 
 	@JmsListener(destination = "freeSemesters")
 	public void onSendMessage(SendFreeSemestersMessage sendMessage) {
 		System.out.println(sendMessage);
 		long id = sendMessage.getId();
 		int freeSemesters = sendMessage.getFreeSemesters();
-		Student student = studentRepository.findByIdWithRelationships(id);
-		if (student != null) {
-			student.setUfsc(freeSemesters);
-			studentRepository.save(student);
-		}
+		
+		studentService.updateSemester(id, freeSemesters);
+		
+//		Student student = studentRepository.findByIdWithRelationships(id);
+//		if (student != null) {
+//			student.setUfsc(freeSemesters);
+//			studentRepository.save(student);
+//		}
 	}
 
 }

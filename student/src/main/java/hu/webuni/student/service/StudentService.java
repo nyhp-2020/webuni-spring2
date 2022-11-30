@@ -156,4 +156,9 @@ public class StudentService {
 	public void updateBalance(long studentId, int amount) {
 		studentRepository.findById(studentId).ifPresent(s -> s.setBalance(s.getBalance() + amount));
 	}
+	
+	@Transactional
+	public void updateSemester(long studentId, int semester) {
+		studentRepository.findById(studentId).ifPresent(s -> s.setUfsc(semester));
+	}
 }
