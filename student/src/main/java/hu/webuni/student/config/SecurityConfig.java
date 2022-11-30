@@ -41,15 +41,18 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter */{
 //			.httpBasic()
 //			.and()
 			.csrf().disable()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
+//			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //oauth2 höz ki kell kapcsolni
+//			.and()
 			.authorizeRequests()
+			.antMatchers("/oauth2/**").permitAll()
 			.antMatchers("/api/login/**").permitAll()
 			.antMatchers("/api/stomp/**").permitAll()
 			.antMatchers("/services/student/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("TEACHER")
 			.antMatchers(HttpMethod.PUT, "/api/courses/**").hasAuthority("TEACHER")
 			.anyRequest().authenticated()
+			.and()
+			.oauth2Login()
 			;
 		
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
