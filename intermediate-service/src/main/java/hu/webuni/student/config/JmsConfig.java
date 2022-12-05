@@ -13,14 +13,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class JmsConfig {
 	
-	@Bean
-	public MessageConverter jacksonJmsMessageConverter(ObjectMapper objectMapper) {
-		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-		converter.setObjectMapper(objectMapper);
-		converter.setTargetType(MessageType.TEXT);
-		converter.setTypeIdPropertyName("_type");
-		return converter;
-	}
+//	@Bean
+//	public MessageConverter jacksonJmsMessageConverter(ObjectMapper objectMapper) {
+//		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+//		converter.setObjectMapper(objectMapper);
+//		converter.setTargetType(MessageType.TEXT);
+//		converter.setTypeIdPropertyName("_type");
+//		return converter;
+//	}
 	
 	@Bean //server side
 	public BrokerService broker() throws Exception {

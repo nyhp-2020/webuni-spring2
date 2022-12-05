@@ -1,8 +1,11 @@
 package hu.webuni.central.config;
 
+import javax.jms.ConnectionFactory;
+
 import org.apache.activemq.broker.BrokerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -20,6 +23,15 @@ public class JmsConfig {
 		converter.setTargetType(MessageType.TEXT);
 		converter.setTypeIdPropertyName("_type");
 		return converter;
+	}
+	
+	@Bean
+	public JmsTemplate jmsTemplate(ObjectMapper objectMapper, ConnectionFactory connectionFactory) {
+		JmsTemplate jmsTemplate = new JmsTemplate();
+		jmsTemplate.setConnectionFactory(connectionFactory);
+		jmsTemplate.setMessageConverter(jacksonJmsMessageConverter(objectMapper));
+		jmsTemplate.setPubSubDomain(true);
+		return jmsTemplate;
 	}
 	
 }
