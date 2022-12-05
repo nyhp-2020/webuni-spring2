@@ -3,8 +3,6 @@ package hu.webuni.student.jms;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import hu.webuni.student.model.Student;
-import hu.webuni.student.repository.StudentRepository;
 import hu.webuni.student.service.StudentService;
 import hu.webuni.student.ws.SendFreeSemestersMessage;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,8 @@ public class SendMessageConsumer {
 	
 	private final StudentService studentService;
 
-	@JmsListener(destination = "freeSemesters")
+//	@JmsListener(destination = "freeSemesters")
+	@JmsListener(destination = StudentService.RESPONSE, containerFactory = "educationFactory")
 	public void onSendMessage(SendFreeSemestersMessage sendMessage) {
 		System.out.println(sendMessage);
 		long id = sendMessage.getId();

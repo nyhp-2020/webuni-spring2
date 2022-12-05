@@ -12,5 +12,7 @@ import hu.webuni.student.model.UniversityUser;
 public interface UserRepository extends JpaRepository<UniversityUser, String>{
 	Optional<UniversityUser> findByUsername(String username);
 	Optional<UniversityUser> findByFacebookId(String facebookId);
+	Optional<UniversityUser> findByGoogleId(String googleId);
+	
 //	Optional<StudentUser> findByFacebookId(String facebookId);
 }

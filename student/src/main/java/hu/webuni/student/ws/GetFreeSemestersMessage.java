@@ -6,5 +6,5 @@ import lombok.Data;
 public class GetFreeSemestersMessage {
 	private long id;
 	private long cid;
-	private String ReplyTo;
+//	private String ReplyTo;
 }

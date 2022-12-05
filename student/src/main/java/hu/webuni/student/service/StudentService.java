@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.jms.Topic;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import hu.webuni.student.model.Student;
 import hu.webuni.student.repository.StudentRepository;
 import hu.webuni.student.ws.GetFreeSemestersMessage;
@@ -31,8 +33,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class StudentService {
 	
-	public String GET_TOPIC = "getSemesters";
-	public String RESPONSE_TOPIC = "freeSemesters";
+	public static final String REQUEST = "getSemesters";
+	public static final String RESPONSE = "freeSemesters";
 	
 //	@Value("${student.scheduled.cronparam}")
 //	private String cronparam;
@@ -43,7 +45,7 @@ public class StudentService {
 	
 	private final CentralService centralService;
 	
-	private final JmsTemplate jmsTemplate;
+	private final JmsTemplate jmsTemplate; //@Bean a JmsConfig-ban
 	
 	@Value("${student.content.profilePics}")
 	private String profilePicsFolder;
@@ -109,13 +111,34 @@ public class StudentService {
 //		studentRepository.save(s);
 		
 		//Sending message instead of direct call
+		
+		askNumFreeSemestersForStudent(s);
+		
+//		GetFreeSemestersMessage getMessage = new GetFreeSemestersMessage();
+//		getMessage.setId(s.getId());
+//		getMessage.setCid(s.getCid());
+////		getMessage.setReplyTo("freeSemesters");
+//		getMessage.setReplyTo(RESPONSE);
+////		this.jmsTemplate.convertAndSend("getSemesters", getMessage);
+//		this.jmsTemplate.convertAndSend(REQUEST, getMessage);
+	}
+	
+	public void askNumFreeSemestersForStudent(Student s) {
 		GetFreeSemestersMessage getMessage = new GetFreeSemestersMessage();
 		getMessage.setId(s.getId());
 		getMessage.setCid(s.getCid());
-//		getMessage.setReplyTo("freeSemesters");
-		getMessage.setReplyTo(RESPONSE_TOPIC);
-//		this.jmsTemplate.convertAndSend("getSemesters", getMessage);
-		this.jmsTemplate.convertAndSend(GET_TOPIC, getMessage);
+		
+		Topic topic = jmsTemplate.execute(session -> session.createTopic(RESPONSE));
+				
+		jmsTemplate.convertAndSend(
+			REQUEST,
+			getMessage,
+			message -> {
+				message.setJMSReplyTo(topic);
+				return message;
+			}
+		);
+		
 	}
 
 	private Path getProfilePicPathForStudent(Long id) {

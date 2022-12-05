@@ -154,18 +154,24 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-oauth2-client</artifactId>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-jose -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-oauth2-jose</artifactId>
-<!--			<version>5.7.5</version>-->
+			<!--			<version>5.7.5</version>-->
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
 			<version>3.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.threeten-jaxb</groupId>
+			<artifactId>threeten-jaxb-core</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 	</dependencies>
@@ -263,6 +269,7 @@
 					<packageName>hu.webuni.student.wsclient</packageName>
 					<wsdlUrls>
 						<wsdlUrl>http://localhost:8081/services/central?wsdl</wsdlUrl>
+						<wsdlUrl>http://localhost:8081/services/timetable?wsdl</wsdlUrl>
 					</wsdlUrls>
 					<bindingDirectory>${basedir}/wsdl</bindingDirectory>
 				</configuration>
