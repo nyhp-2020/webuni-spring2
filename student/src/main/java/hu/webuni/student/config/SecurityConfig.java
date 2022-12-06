@@ -47,7 +47,7 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter */{
 			.antMatchers("/oauth2/**").permitAll()
 			.antMatchers("/api/login/**").permitAll()
 			.antMatchers("/api/stomp/**").permitAll()
-			.antMatchers("/services/student/**").permitAll()
+			.antMatchers("/services/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("TEACHER")
 			.antMatchers(HttpMethod.PUT, "/api/courses/**").hasAuthority("TEACHER")
 			.anyRequest().authenticated()
