@@ -27,11 +27,16 @@ public class FacebookLoginService {
 	
 	public UserDetails getUserDetailsForToken(String fbToken) {
 		
+		WebshopUser webshopUser = createWebshopUserForToken(fbToken);
+		
+		return WebshopUserDetailsService.createUserDetails(webshopUser);
+	}
+
+	public WebshopUser createWebshopUserForToken(String fbToken) {
 		FacebookData fbData = getEmailOfFbUser(fbToken);
 		
 		WebshopUser webshopUser = findOrCreateUser(fbData);
-		
-		return WebshopUserDetailsService.createUserDetails(webshopUser);
+		return webshopUser;
 	}
 
 	private WebshopUser findOrCreateUser(FacebookData fbData) {

@@ -3,7 +3,6 @@ package hu.webuni.webshop.user.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,13 +11,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import hu.webuni.tokenlib.JwtAuthFilter;
+import hu.webuni.webshop.user.security.WebshopUserDetailsService;
 
 
 
@@ -30,8 +29,8 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/{
 	@Autowired
 	JwtAuthFilter jwtAuthFilter; //Tokenlib-ből
 	
-//	@Autowired
-//	UserDetailsService userDetailsService;
+	@Autowired
+	WebshopUserDetailsService userDetailsService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -62,18 +61,18 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/{
 		return new BCryptPasswordEncoder();
 	}
 	
-//	@Bean
-//	public AuthenticationProvider authenticationProvider() {
-//		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-//		return daoAuthenticationProvider;
-//	}
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		return daoAuthenticationProvider;
+	}
 	
-//	@Bean
-//	public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
-//		AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//		authManagerBuilder.authenticationProvider(authenticationProvider());
-//		return authManagerBuilder.build();
-//	}
+	@Bean
+	public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authManagerBuilder.authenticationProvider(authenticationProvider());
+		return authManagerBuilder.build();
+	}
 }
