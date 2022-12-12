@@ -1,4 +1,4 @@
-package hu.webuni.webshop.catalog.model;
+package hu.webuni.webshop.order.model;
 
 import java.util.Set;
 
@@ -6,11 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
-
-
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,15 +22,28 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedEntityGraph(name = "Product.category", attributeNodes = @NamedAttributeNode("category"))
-public class Product {
+public class WsOrder {
+	
+	public enum OrderState {
+		PENDING, 
+		CONFIRMED,
+		DECLINED,
+		SHIPMENT_FAILED,
+		DELIVERED
+		;
+	}
 	
 	@Id
 	@GeneratedValue
 	@EqualsAndHashCode.Include()
-	private long id;
-	String name;
-	double price;
+	long id;
+	String deliveryAddress;
+	
+	@OneToMany(mappedBy = "wsorder")
+	Set<OrderItem> items;
+	
 	@ManyToOne
-	Category category;
+	WebshopUser webshopUser;
+	
+	OrderState orderState;
 }

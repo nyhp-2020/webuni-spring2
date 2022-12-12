@@ -81,6 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CourseDto'
+      description: ''
   /api/courses/search:
     get:
       tags:

@@ -43,6 +43,7 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/{
 			.authorizeRequests()
 //			.antMatchers("/oauth2/**").permitAll()
 			.antMatchers("/api/login/**").permitAll()
+			.antMatchers("/api/categories/**").permitAll()
 //			.antMatchers("/api/stomp/**").permitAll()
 //			.antMatchers("/services/**").permitAll()
 //			.antMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("TEACHER")

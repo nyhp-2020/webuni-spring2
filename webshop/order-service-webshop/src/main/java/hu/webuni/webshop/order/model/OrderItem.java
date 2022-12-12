@@ -1,13 +1,11 @@
 package hu.webuni.webshop.order.model;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
+//import hu.webuni.webshop.catalog.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,28 +20,16 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Order {
-	
-	public enum OrderState {
-		PENDING, 
-		CONFIRMED,
-		DECLINED,
-		SHIPMENT_FAILED,
-		DELIVERED
-		;
-	}
+public class OrderItem {
 	
 	@Id
 	@GeneratedValue
 	@EqualsAndHashCode.Include()
 	long id;
-	String deliveryAddress;
-	
-	@OneToMany(mappedBy = "order")
-	Set<Item> items;
-	
-//	@ManyToOne
-//	WebshopUser webshopUser;
-	
-	OrderState orderState;
+	long quantity;
+	double orderPrice;
+	@ManyToOne
+	WsOrder wsorder;
+	@ManyToOne
+	Product product;
 }

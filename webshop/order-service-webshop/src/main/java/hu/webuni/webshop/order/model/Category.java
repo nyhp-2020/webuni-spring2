@@ -1,11 +1,12 @@
 package hu.webuni.webshop.order.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-//import hu.webuni.webshop.catalog.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -20,16 +21,13 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Item {
-	
+public class Category {
 	@Id
 	@GeneratedValue
 	@EqualsAndHashCode.Include()
-	long id;
-	long quantity;
-	double defaultPrice;
-	@ManyToOne
-	Order order;
-//	@ManyToOne
-//	Product product;
+	private long id;
+	private String name;
+	@OneToMany(mappedBy = "category")
+	Set<Product> products;
+
 }

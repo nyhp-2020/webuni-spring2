@@ -1,4 +1,4 @@
-package hu.webuni.webshop.user.model;
+package hu.webuni.webshop.order.model;
 
 import java.util.Set;
 

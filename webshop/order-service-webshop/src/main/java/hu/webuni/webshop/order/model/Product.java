@@ -1,4 +1,4 @@
-package hu.webuni.webshop.catalog.model;
+package hu.webuni.webshop.order.model;
 
 import java.util.Set;
 
@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 
 
@@ -26,7 +24,6 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedEntityGraph(name = "Product.category", attributeNodes = @NamedAttributeNode("category"))
 public class Product {
 	
 	@Id
@@ -37,4 +34,6 @@ public class Product {
 	double price;
 	@ManyToOne
 	Category category;
+//	@OneToMany(mappedBy = "product")
+//	Set<OrderItem> items;
 }

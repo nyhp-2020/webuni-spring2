@@ -6,8 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 
+
+
 @SpringBootApplication
-//@SpringBootApplication(scanBasePackageClasses = {CatalogServiceWebshopApplication.class ,OrderServiceWebshopApplication.class})
+//@SpringBootApplication(scanBasePackageClasses = {ProductDto.class ,OrderServiceWebshopApplication.class})
 public class OrderServiceWebshopApplication {
 
 	public static void main(String[] args) {
