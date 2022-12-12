@@ -62,7 +62,8 @@ public class UserController {
 		userDto.setRoles(roles);
 		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 		userDto.setPassword(encodedPassword);
-		WebshopUser user = userService.save(userMapper.dtoToWebshopUser(userDto));
+		WebshopUser user = userService.createNewWebshopUser(userMapper.dtoToWebshopUser(userDto));
+//		WebshopUser user = userService.save(userMapper.dtoToWebshopUser(userDto));
 		return userMapper.webshopUserToDto(user);
 	}
 

@@ -44,7 +44,14 @@ public class UserService {
 		HashSet<String> roles = new HashSet<>();
 		roles.add(role);
 		user.setRoles(roles);
-		return userRepository.save(user);
+		return createNewWebshopUser(user);
+//		return userRepository.save(user);
 	}
 
+	@Transactional
+	public WebshopUser createNewWebshopUser(WebshopUser webshopUser) {
+		if(!userRepository.existsByUsername(webshopUser.getUsername()))
+			return userRepository.save(webshopUser);
+		throw new RuntimeException("Existing username!");
+	}
 }

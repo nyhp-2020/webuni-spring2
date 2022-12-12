@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
+
 import lombok.Data;
 
 @Data
@@ -18,6 +20,7 @@ public class WebshopUserDto {
 	private String password;
 	@NotNull
 	@NotEmpty
+	@Email
 	private String email;
 	private String facebookId;
 	private ArrayList<String> roles;

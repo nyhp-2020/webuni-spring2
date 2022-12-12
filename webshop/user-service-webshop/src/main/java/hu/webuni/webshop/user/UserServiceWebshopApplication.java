@@ -3,10 +3,9 @@ package hu.webuni.webshop.user;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.authentication.AuthenticationManager;
 
 import hu.webuni.tokenlib.JwtAuthFilter;
+import hu.webuni.webshop.user.repository.UserRepository;
 import hu.webuni.webshop.user.service.InitDbService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceWebshopApplication implements CommandLineRunner{
 	
 	private final InitDbService initDbService;
+	private final UserRepository userRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(UserServiceWebshopApplication.class, args);
