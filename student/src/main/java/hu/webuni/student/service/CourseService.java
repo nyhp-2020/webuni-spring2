@@ -107,7 +107,8 @@ public class CourseService {
 		
 
 		return Lists.newArrayList(courseRepository.findAll(ExpressionUtils.allOf(predicates)));
-		
+		//ExpressionUtils.allOf(predicates) összeéseli a predicate-eket
+		//Lists.newArrayList() Iterable > ArrayList konverzió, Guava függőség kell hozzá
 	}
 	
 	@Transactional

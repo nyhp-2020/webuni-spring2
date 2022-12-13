@@ -1,5 +1,6 @@
 package hu.webuni.webshop.catalog.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -29,5 +30,12 @@ public class Category {
 	private String name;
 	@OneToMany(mappedBy = "category")
 	Set<Product> products;
+	
+	public void addProduct(Product product) {
+		product.setCategory(this);
+		if(this.products == null)
+			this.products = new HashSet<>();
+		this.products.add(product);
+	}
 
 }

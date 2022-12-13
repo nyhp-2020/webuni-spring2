@@ -21,6 +21,7 @@ import hu.webuni.webshop.catalog.api.model.ProductDto;
 import hu.webuni.webshop.catalog.mapper.ProductMapper;
 import hu.webuni.webshop.catalog.model.Product;
 import hu.webuni.webshop.catalog.repository.ProductRepository;
+import hu.webuni.webshop.catalog.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,6 +32,7 @@ public class ProductController implements ProductControllerApi{
 	private final NativeWebRequest nativeWebRequest;
 	private final ProductMapper productMapper;
 	private final ProductRepository productRepository;
+	private final ProductService productService;
 
 	public void configurePredicate(@QuerydslPredicate(root = Product.class) Predicate predicate) {}
 	
@@ -56,4 +58,18 @@ public class ProductController implements ProductControllerApi{
 		return ResponseEntity.ok(productMapper.flightsToDtos(productRepository.findAll(predicate)));
 	}
 
+	@Override
+	public ResponseEntity<ProductDto> createProduct(Long categoryId, @Valid ProductDto productDto) {
+		System.out.println("categoryId :" + categoryId);
+		return ProductControllerApi.super.createProduct(categoryId, productDto);
+	}
+
+//	@Override
+//	public ResponseEntity<ProductDto> createProduct(Long categoryId, @Valid ProductDto productDto) {
+//		Product product = productService.createNewProduct(categoryId, productMapper.dtoToProduct(productDto));
+//		return ResponseEntity.ok(productMapper.ProductToDto(product));
+//	}
+
+	
+	
 }

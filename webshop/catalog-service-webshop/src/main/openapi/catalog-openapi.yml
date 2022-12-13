@@ -78,6 +78,31 @@ paths:
           in: query
           name: price
     parameters: []
+  '/api/products/{category_id}':
+    post:
+      tags:
+        - product-controller
+      summary: ''
+      operationId: createProduct
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: category_id
+        in: path
+        required: true
 info:
   title: OpenAPI definition
   version: v0
