@@ -78,7 +78,7 @@ paths:
           in: query
           name: price
     parameters: []
-  '/api/products/{category_id}':
+  /api/products:
     post:
       tags:
         - product-controller
@@ -96,13 +96,40 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductDto'
+    parameters: []
+  '/api/products/{id}':
     parameters:
       - schema:
           type: integer
           format: int64
-        name: category_id
+        name: id
         in: path
         required: true
+    put:
+      tags:
+        - product-controller
+      summary: ''
+      operationId: modify Product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./catalog-openapi.yaml#/components/schemas/ProductDto
+    delete:
+      tags:
+        - product-controller
+      summary: ''
+      operationId: delete Product
+      responses:
+        '200':
+          description: OK
 info:
   title: OpenAPI definition
   version: v0
@@ -123,6 +150,7 @@ components:
           format: double
         data:
           $ref: '#/components/schemas/CategoryDto'
+      title: ''
     CategoryDto:
       type: object
       properties:

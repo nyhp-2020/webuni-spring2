@@ -18,6 +18,7 @@ import com.querydsl.core.types.Predicate;
 
 import hu.webuni.webshop.catalog.api.ProductControllerApi;
 import hu.webuni.webshop.catalog.api.model.ProductDto;
+import hu.webuni.webshop.catalog.api.model.ProductDto1;
 import hu.webuni.webshop.catalog.mapper.ProductMapper;
 import hu.webuni.webshop.catalog.model.Product;
 import hu.webuni.webshop.catalog.repository.ProductRepository;
@@ -59,10 +60,24 @@ public class ProductController implements ProductControllerApi{
 	}
 
 	@Override
-	public ResponseEntity<ProductDto> createProduct(Long categoryId, @Valid ProductDto productDto) {
-		System.out.println("categoryId :" + categoryId);
-		return ProductControllerApi.super.createProduct(categoryId, productDto);
+	public ResponseEntity<ProductDto> createProduct(@Valid ProductDto productDto) {
+		// TODO Auto-generated method stub
+		return ProductControllerApi.super.createProduct(productDto);
 	}
+
+	@Override
+	public ResponseEntity<Void> deleteProduct(Long id) {
+		// TODO Auto-generated method stub
+		return ProductControllerApi.super.deleteProduct(id);
+	}
+
+	@Override
+	public ResponseEntity<ProductDto> modifyProduct(Long id, @Valid ProductDto1 productDto1) {
+		// TODO Auto-generated method stub
+		return ProductControllerApi.super.modifyProduct(id, productDto1);
+	}
+
+	
 
 //	@Override
 //	public ResponseEntity<ProductDto> createProduct(Long categoryId, @Valid ProductDto productDto) {
