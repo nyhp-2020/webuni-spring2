@@ -8,5 +8,8 @@ public class OrderItemDto {
 	long quantity;
 	double orderPrice;
 	WsOrderDto wsorder;
-	ProductDto product;
+//	ProductDto product;
+	
+	String productname;
+	long productId;
 }

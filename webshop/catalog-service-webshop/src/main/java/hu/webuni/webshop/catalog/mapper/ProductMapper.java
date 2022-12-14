@@ -13,9 +13,9 @@ public interface ProductMapper {
 	
 //	Category dtoToCategory(CategoryDto categoryDto);
 //	CategoryDto CategoryToDto(Category category);
-	@Mapping(source = "data",target = "category")
+//	@Mapping(source = "data",target = "category")
 	Product dtoToProduct(ProductDto productDto);
-	@Mapping(source = "category",target = "data")
+//	@Mapping(source = "category",target = "data")
 	ProductDto ProductToDto(Product product);
 	
 	List<ProductDto> flightsToDtos(Iterable<Product> findAll);

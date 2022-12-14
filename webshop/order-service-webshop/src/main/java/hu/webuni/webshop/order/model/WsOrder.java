@@ -42,8 +42,8 @@ public class WsOrder {
 	@OneToMany(mappedBy = "wsorder")
 	Set<OrderItem> items;
 	
-	@ManyToOne
-	WebshopUser webshopUser;
-	
+//	@ManyToOne
+//	WebshopUser webshopUser;
+	String username;
 	OrderState orderState;
 }

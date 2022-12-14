@@ -9,9 +9,9 @@ import hu.webuni.webshop.order.model.OrderItem;
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
 	@Mapping(target = "wsorder",ignore = true)
-	@Mapping(target = "product",ignore = true)
+//	@Mapping(target = "product",ignore = true)
 	OrderItem DtoToOrderItem(OrderItemDto itemDto);
 	@Mapping(target = "wsorder",ignore = true)
-	@Mapping(target = "product",ignore = true)
+//	@Mapping(target = "product",ignore = true)
 	OrderItemDto OrderItemToDto(OrderItem orderItem);
 }

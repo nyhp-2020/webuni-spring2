@@ -13,9 +13,9 @@ import hu.webuni.webshop.catalog.model.Product;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-	@Mapping(source = "data",target = "category")
+//	@Mapping(source = "data",target = "category")
 	Product dtoToProduct(ProductDto productDto);
-	@Mapping(source = "category",target = "data")
+//	@Mapping(source = "category",target = "data")
 	ProductDto ProductToDto(Product product);
 //	@Mapping(target = "products", ignore = true)
 	Category dtoToCategory(CategoryDto categoryDto);

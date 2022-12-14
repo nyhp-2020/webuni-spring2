@@ -30,6 +30,9 @@ public class OrderItem {
 	double orderPrice;
 	@ManyToOne
 	WsOrder wsorder;
-	@ManyToOne
-	Product product;
+//	@ManyToOne
+//	Product product;
+	
+	String productname;
+	long productId;
 }

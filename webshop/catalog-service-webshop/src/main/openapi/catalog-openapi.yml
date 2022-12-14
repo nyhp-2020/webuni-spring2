@@ -121,11 +121,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./catalog-openapi.yaml#/components/schemas/ProductDto
+              $ref: '#/components/schemas/ProductDto'
     delete:
       tags:
         - product-controller
-      summary: ''
       operationId: delete Product
       responses:
         '200':
@@ -139,6 +138,7 @@ components:
   schemas:
     ProductDto:
       type: object
+      title: ProductDto
       properties:
         id:
           type: integer
@@ -148,10 +148,10 @@ components:
         price:
           type: number
           format: double
-        data:
+        category:
           $ref: '#/components/schemas/CategoryDto'
-      title: ''
     CategoryDto:
+      title: CategoryDto
       type: object
       properties:
         id:
@@ -159,7 +159,3 @@ components:
           format: int64
         name:
           type: string
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductDto'

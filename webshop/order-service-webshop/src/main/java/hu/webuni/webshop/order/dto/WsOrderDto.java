@@ -11,6 +11,7 @@ public class WsOrderDto {
 	long id;
 	String deliveryAddress;
 	ArrayList<OrderItemDto> items;
-	WebshopUserDto webshopUser;
+//	WebshopUserDto webshopUser;
+	String username;
 	OrderState orderState;
 }
