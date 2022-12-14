@@ -10,7 +10,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 
-
+import org.hibernate.envers.Audited;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +27,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @NamedEntityGraph(name = "Product.category", attributeNodes = @NamedAttributeNode("category"))
+@Audited
 public class Product {
 	
 	@Id
