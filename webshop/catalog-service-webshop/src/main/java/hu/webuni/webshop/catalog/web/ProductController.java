@@ -1,6 +1,7 @@
 package hu.webuni.webshop.catalog.web;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -20,9 +21,12 @@ import org.springframework.web.server.ResponseStatusException;
 import com.querydsl.core.types.Predicate;
 
 import hu.webuni.webshop.catalog.api.ProductControllerApi;
+import hu.webuni.webshop.catalog.api.model.HistoryDataProductDto;
 import hu.webuni.webshop.catalog.api.model.ProductDto;
+import hu.webuni.webshop.catalog.mapper.HistoryDataMapper;
 import hu.webuni.webshop.catalog.mapper.ProductMapper;
 import hu.webuni.webshop.catalog.model.Category;
+import hu.webuni.webshop.catalog.model.HistoryData;
 import hu.webuni.webshop.catalog.model.Product;
 import hu.webuni.webshop.catalog.repository.CategoryRepository;
 import hu.webuni.webshop.catalog.repository.ProductRepository;
@@ -39,6 +43,7 @@ public class ProductController implements ProductControllerApi {
 	private final ProductRepository productRepository;
 	private final ProductService productService;
 	private final CategoryRepository categoryRepository;
+	private final HistoryDataMapper historyDataMapper;
 
 	public void configurePredicate(@QuerydslPredicate(root = Product.class) Predicate predicate) {
 	}
@@ -105,6 +110,20 @@ public class ProductController implements ProductControllerApi {
 		} catch (NoSuchElementException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@Override
+	public ResponseEntity<List<HistoryDataProductDto>> getApiProductsIdHistory(Long id) {
+		
+		List<HistoryData<Product>> products = productService.getProductHistory(id);
+		
+		List<HistoryDataProductDto> productDtosWithHistory = new ArrayList<>();
+		
+		products.forEach(hd ->{
+			productDtosWithHistory.add(historyDataMapper.productHistoryDataToDto(hd));
+		});
+		
+		return ResponseEntity.ok(productDtosWithHistory);
 	}
 	
 	

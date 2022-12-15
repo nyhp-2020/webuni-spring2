@@ -208,7 +208,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AirportDto'
-  '/api/airports/{id}/history':
+  /api/airports/history:
     get:
       tags:
         - airport-controller
@@ -229,6 +229,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/HistoryDataAirportDto'
+      summary: ''
+    parameters:
+      - schema:
+          type: string
+        name: ''
+        in: path
+        required: true
   '/api/flights/{flightId}/pollDelay':
     delete:
       tags:
@@ -391,3 +398,4 @@ components:
         date:
           type: string
           format: date-time
+      title: ''

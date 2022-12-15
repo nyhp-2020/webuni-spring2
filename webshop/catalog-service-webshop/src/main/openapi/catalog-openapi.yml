@@ -129,6 +129,28 @@ paths:
       responses:
         '200':
           description: OK
+  '/api/products/{id}/history':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: 
+        - product-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoryDataProductDto'
+      operationId: get-api-products-id-history
 info:
   title: OpenAPI definition
   version: v0
@@ -159,3 +181,24 @@ components:
           format: int64
         name:
           type: string
+    HistoryDataProductDto:
+      title: HistoryDataProductDto
+      x-stoplight:
+        id: hapoijflx83mm
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProductDto'
+        revType:
+          type: string
+          enum:
+            - ADD
+            - MOD
+            - DEL
+        revision:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+      description: ''
