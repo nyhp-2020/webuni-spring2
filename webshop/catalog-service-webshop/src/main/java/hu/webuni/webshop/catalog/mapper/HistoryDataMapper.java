@@ -13,7 +13,7 @@ import hu.webuni.webshop.catalog.model.Product;
 public interface HistoryDataMapper {
 	
 	HistoryDataProductDto productHistoryDataToDto(HistoryData<Product> hd);
-	
+//	@Mapping(ignore = true, target = "products") a Dto-ban nincs.
 	CategoryDto categoryToDto(Category category);
 
 }

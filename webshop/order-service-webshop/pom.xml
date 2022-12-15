@@ -15,8 +15,24 @@
 	<properties>
 		<java.version>17</java.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+		<spring-cloud.version>2021.0.1</spring-cloud.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-artemis</artifactId>
@@ -28,6 +44,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-kahadb-store</artifactId>
+			<!--			<version>5.16.4</version>-->
 		</dependency>
 
 		<dependency>
@@ -50,13 +75,19 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
-		
-<!--		<dependency>-->
-<!--			<groupId>hu.webuni.webshop.catalog</groupId>-->
-<!--			<artifactId>catalog-service-webshop</artifactId>-->
-<!--			<version>0.0.1-SNAPSHOT</version>-->
-<!--		</dependency>-->
-		
+
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+
+		<!--		<dependency>-->
+		<!--			<groupId>hu.webuni.webshop.catalog</groupId>-->
+		<!--			<artifactId>catalog-service-webshop</artifactId>-->
+		<!--			<version>0.0.1-SNAPSHOT</version>-->
+		<!--		</dependency>-->
+
 	</dependencies>
 
 	<build>
@@ -101,6 +132,28 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- The name of your generated source package -->
+					<packageName>hu.webuni.order-service-webshop.wsclient</packageName>
+					<wsdlUrls>
+						<!--						<wsdlUrl>http://localhost:8081/services/central?wsdl</wsdlUrl>-->
+						<!--						<wsdlUrl>http://localhost:8081/services/timetable?wsdl</wsdlUrl>-->
+					</wsdlUrls>
+					<bindingDirectory>${basedir}/wsdl</bindingDirectory>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
