@@ -1,0 +1,28 @@
+server:
+  port: 8080
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8085/eureka/
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: catalog-service-webshop
+        uri: lb://catalog-service-webshop
+        predicates:
+        - Path=/catalog-service-webshop/**
+        filters:
+        - RewritePath=/catalog-service-webshop(?<segment>/?.*), /api$\{segment}
+      - id: order-service-webshop
+        uri: lb://order-service-webshop
+        predicates:
+        - Path=/order-service-webshop/**
+        filters:
+        - RewritePath=/order-service-webshop(?<segment>/?.*), /api$\{segment}
+      - id: user-service-webshop
+        uri: lb://users-service-webshop
+        predicates:
+        - Path=/users/**
+        filters:
+        - RewritePath=/users(?<segment>/?.*), /api$\{segment}
