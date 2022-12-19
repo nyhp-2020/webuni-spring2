@@ -26,13 +26,16 @@ public class OrderItem {
 	@GeneratedValue
 	@EqualsAndHashCode.Include()
 	long id;
+	@EqualsAndHashCode.Include()
 	long quantity;
+	@EqualsAndHashCode.Include()
 	double orderPrice;
 	@ManyToOne
 	WsOrder wsorder;
 //	@ManyToOne
 //	Product product;
-	
+	@EqualsAndHashCode.Include()
 	String productname;
+	@EqualsAndHashCode.Include()
 	long productId;
 }

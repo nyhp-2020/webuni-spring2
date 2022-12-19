@@ -1,11 +1,11 @@
 package hu.webuni.webshop.order.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -46,4 +46,11 @@ public class WsOrder {
 //	WebshopUser webshopUser;
 	String username;
 	OrderState orderState;
+	
+	public void addOrderItem(OrderItem orderItem) {
+		orderItem.setWsorder(this);
+		if(this.items == null)
+			this.items = new HashSet<>();
+		this.items.add(orderItem);
+	}
 }

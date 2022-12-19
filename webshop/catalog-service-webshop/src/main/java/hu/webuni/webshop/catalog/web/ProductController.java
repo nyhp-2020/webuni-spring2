@@ -8,7 +8,10 @@ import java.util.NoSuchElementException;
 import javax.validation.Valid;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.SortDefault;
 import org.springframework.data.web.querydsl.QuerydslPredicateArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +41,33 @@ import lombok.RequiredArgsConstructor;
 public class ProductController implements ProductControllerApi {
 
 	final QuerydslPredicateArgumentResolver prediacateResolver;
+	private final PageableHandlerMethodArgumentResolver pageableResolver;
 	private final NativeWebRequest nativeWebRequest;
 	private final ProductMapper productMapper;
 	private final ProductRepository productRepository;
 	private final ProductService productService;
 	private final CategoryRepository categoryRepository;
 	private final HistoryDataMapper historyDataMapper;
+	
+
+	public void configPageable(@SortDefault("id") Pageable pageable) {
+	}
+
+	private Pageable createPageable(String pageableConfigurerMethodName) {
+		Method method;
+		try {
+			method = this.getClass().getMethod(pageableConfigurerMethodName, Pageable.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		MethodParameter methodParameter = new MethodParameter(method, 0);
+		ModelAndViewContainer mavContainer = null;
+		WebDataBinderFactory binderFactory = null;
+		Pageable pageable = pageableResolver.resolveArgument(methodParameter, mavContainer, nativeWebRequest,
+				binderFactory);
+		return pageable;
+	}
 
 	public void configurePredicate(@QuerydslPredicate(root = Product.class) Predicate predicate) {
 	}
@@ -66,9 +90,11 @@ public class ProductController implements ProductControllerApi {
 	@Override
 	public ResponseEntity<List<ProductDto>> searchProducts(@Valid Integer page, @Valid Integer size, @Valid String sort,
 			@Valid Long id, @Valid String name, @Valid String categoryName, @Valid List<Double> price) {
-
+		
+		Pageable pageable = createPageable("configPageable");
 		Predicate predicate = createPredicate("configurePredicate");
-		return ResponseEntity.ok(productMapper.flightsToDtos(productRepository.findAll(predicate)));
+		
+		return ResponseEntity.ok(productMapper.flightsToDtos(productRepository.findAll(predicate,pageable)));
 	}
 
 	@Override

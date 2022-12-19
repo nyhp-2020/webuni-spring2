@@ -33,10 +33,10 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--		</dependency>-->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -81,11 +81,11 @@
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
-			<version>2.3.3</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.sun.xml.ws</groupId>-->
+<!--			<artifactId>jaxws-rt</artifactId>-->
+<!--			<version>2.3.3</version>-->
+<!--		</dependency>-->
 
 		<!--		<dependency>-->
 		<!--			<groupId>hu.webuni.webshop.catalog</groupId>-->
@@ -97,18 +97,6 @@
 
 	<build>
 		<plugins>
-			<!--			<plugin>-->
-			<!--				<groupId>org.springframework.boot</groupId>-->
-			<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-			<!--				<configuration>-->
-			<!--					<excludes>-->
-			<!--						<exclude>-->
-			<!--							<groupId>org.projectlombok</groupId>-->
-			<!--							<artifactId>lombok</artifactId>-->
-			<!--						</exclude>-->
-			<!--					</excludes>-->
-			<!--				</configuration>-->
-			<!--			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -138,28 +126,28 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>wsimport</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
+<!--			<plugin>-->
+<!--				<groupId>org.codehaus.mojo</groupId>-->
+<!--				<artifactId>jaxws-maven-plugin</artifactId>-->
+<!--				<version>2.6</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<goals>-->
+<!--							<goal>wsimport</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--				<configuration>-->
 					<!-- The name of your generated source package -->
-					<packageName>hu.webuni.order-service-webshop.wsclient</packageName>
-					<wsdlUrls>
+<!--					<packageName>hu.webuni.order-service-webshop.wsclient</packageName>-->
+<!--					<wsdlUrls>-->
 						<!--						<wsdlUrl>http://localhost:8081/services/central?wsdl</wsdlUrl>-->
 						<!--						<wsdlUrl>http://localhost:8081/services/timetable?wsdl</wsdlUrl>-->
-					</wsdlUrls>
-					<bindingDirectory>${basedir}/wsdl</bindingDirectory>
-				</configuration>
-
-			</plugin>
+<!--					</wsdlUrls>-->
+<!--					<bindingDirectory>${basedir}/wsdl</bindingDirectory>-->
+<!--				</configuration>-->
+<!---->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 
