@@ -2,6 +2,7 @@ package hu.webuni.webshop.order.web;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import hu.webuni.webshop.order.dto.WsOrderDto;
 import hu.webuni.webshop.order.mapper.OrderMapper;
@@ -46,6 +48,8 @@ public class OrderController {
 		if(confirmed) {
 			orderService.setOrderConfirmed(id);
 			//XML
+			WsOrder order = orderService.getOrderByIdWithItems(id);
+			WsOrderDto wsOrderDto = orderMapper.WsOrderToDto(order);
 		}
 		else
 			orderService.setOrderDeclined(id);
@@ -55,6 +59,14 @@ public class OrderController {
 	public List<WsOrderDto> findByUsername(@RequestParam String username){
 		List<WsOrder> orders = orderService.findByUsernameIgnoreCase(username);
 		return orderMapper.ordersToDtos(orders);
+	}
+	
+	@GetMapping("{id}")
+	public WsOrderDto findById(@PathVariable("id") long id) {
+		WsOrder order = orderService.getOrderByIdWithItems(id);
+		if(order == null)
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		return orderMapper.WsOrderToDto(order);
 	}
 
 }

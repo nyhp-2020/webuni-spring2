@@ -88,4 +88,9 @@ public class OrderService {
 		orderRepository.findById(id)
 		.ifPresent(o -> o.setOrderState(OrderState.DELIVERED));
 	}
+	
+
+	public WsOrder getOrderByIdWithItems(long id) {
+		return orderRepository.findByIdWithItems(id);	
+	}
 }
