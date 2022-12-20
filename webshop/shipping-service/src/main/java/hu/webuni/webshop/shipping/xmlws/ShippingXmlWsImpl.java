@@ -6,9 +6,9 @@ import java.util.Random;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import hu.webuni.webshop.shipping.dto.OrderItemDto;
-import hu.webuni.webshop.shipping.dto.WsOrderDto;
-import hu.webuni.webshop.shipping.dto.WsOrderDto.OrderState;
+import hu.webuni.webshop.shipping.dto.ShipmentOrderDto;
+import hu.webuni.webshop.shipping.dto.ShipmentOrderDto.ShipmentState;
+import hu.webuni.webshop.shipping.dto.ShipmentOrderItemDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,12 +17,15 @@ public class ShippingXmlWsImpl implements ShippingXmlWs{
 	
 	private Random random = new Random();
 	
-	@Async
+//	@Async
 	@Override
-	public int sendOrder(WsOrderDto wsOrderDto) {
-		System.out.println(wsOrderDto.getUsername());
-		ArrayList<OrderItemDto> items = wsOrderDto.getItems();
-		System.out.println(items.get(0).getProductname());
+	public int sendOrder(ShipmentOrderDto orderDto) {
+		System.out.println(orderDto.getId());
+		System.out.println(orderDto.getUsername());
+		ArrayList<ShipmentOrderItemDto> items = orderDto.getItems();
+		items.forEach(i -> {
+			System.out.println(i.getProductname());
+		});
 		
 		try {
 			Thread.sleep(10000);
@@ -30,17 +33,17 @@ public class ShippingXmlWsImpl implements ShippingXmlWs{
 		}
 		
 		int rnd = random.nextInt(0, 99);
-		OrderState state;
+		ShipmentState state;
 		if (rnd < 50) {
-			state = OrderState.SHIPMENT_FAILED;
+			state = ShipmentState.SHIPMENT_FAILED;
 		}else {
-			state = OrderState.DELIVERED;
+			state = ShipmentState.DELIVERED;
 		}
 		
-		//Üzenet sorba üzenet (state)
+		//Üzenet sorba üzenet (state,id)
 		
 		
-		return rnd;
+		return random.nextInt(0, 1000); //as shipmentId
 		
 	}
 

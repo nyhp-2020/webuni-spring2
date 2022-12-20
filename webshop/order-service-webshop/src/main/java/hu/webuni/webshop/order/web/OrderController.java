@@ -48,8 +48,9 @@ public class OrderController {
 		if(confirmed) {
 			orderService.setOrderConfirmed(id);
 			//XML
-			WsOrder order = orderService.getOrderByIdWithItems(id);
-			WsOrderDto wsOrderDto = orderMapper.WsOrderToDto(order);
+			orderService.callXmlService(id);
+//			WsOrder order = orderService.getOrderByIdWithItems(id);
+//			WsOrderDto wsOrderDto = orderMapper.WsOrderToDto(order);
 		}
 		else
 			orderService.setOrderDeclined(id);

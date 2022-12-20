@@ -8,6 +8,10 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.webuni.webshop.order.ShipmentOrderDto;
+import hu.webuni.webshop.order.ShippingXmlWs;
+import hu.webuni.webshop.order.ShippingXmlWsImplService;
+import hu.webuni.webshop.order.mapper.ShippingMapper;
 import hu.webuni.webshop.order.model.OrderItem;
 import hu.webuni.webshop.order.model.WsOrder;
 import hu.webuni.webshop.order.model.WsOrder.OrderState;
@@ -22,6 +26,8 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	
 	private final ItemRepository itemRepository;
+	
+	private final ShippingMapper shippingMapper;
 
 	@Transactional
 	public WsOrder save(WsOrder wsorder) {
@@ -92,5 +98,19 @@ public class OrderService {
 
 	public WsOrder getOrderByIdWithItems(long id) {
 		return orderRepository.findByIdWithItems(id);	
+	}
+	
+	public void callXmlService(long id) {
+		
+		ShippingXmlWs shippingXmlWsImplPort = new ShippingXmlWsImplService().getShippingXmlWsImplPort();
+		
+		WsOrder order = getOrderByIdWithItems(id);
+		
+		ShipmentOrderDto shipmentOrderDto = shippingMapper.WsOrderToShipmentOrderDto(order);
+		
+		shipmentOrderDto.setAdmissionAddress("Bp, Lehel piac");
+		
+		shippingXmlWsImplPort.sendOrder(shipmentOrderDto);
+		
 	}
 }

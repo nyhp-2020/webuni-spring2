@@ -2,11 +2,11 @@ package hu.webuni.webshop.shipping.xmlws;
 
 import javax.jws.WebService;
 
-import hu.webuni.webshop.shipping.dto.WsOrderDto;
+import hu.webuni.webshop.shipping.dto.ShipmentOrderDto;
 
 @WebService
 public interface ShippingXmlWs {
 	
-	public int sendOrder(WsOrderDto wsOrderDto);
+	public int sendOrder(ShipmentOrderDto wsOrderDto);
 
 }
