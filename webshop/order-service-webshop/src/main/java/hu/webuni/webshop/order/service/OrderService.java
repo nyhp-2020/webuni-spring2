@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hu.webuni.webshop.order.SendOrder;
 import hu.webuni.webshop.order.ShipmentOrderDto;
 import hu.webuni.webshop.order.ShippingXmlWs;
 import hu.webuni.webshop.order.ShippingXmlWsImplService;
@@ -109,8 +110,12 @@ public class OrderService {
 		ShipmentOrderDto shipmentOrderDto = shippingMapper.WsOrderToShipmentOrderDto(order);
 		
 		shipmentOrderDto.setAdmissionAddress("Bp, Lehel piac");
+		SendOrder sendOrder = new SendOrder();
+		sendOrder.setArg0(shipmentOrderDto);
+		int shipmentId = shippingXmlWsImplPort.sendOrder(sendOrder);
+//		int shipmentId = shippingXmlWsImplPort.sendOrder(shipmentOrderDto);
 		
-		shippingXmlWsImplPort.sendOrder(shipmentOrderDto);
+		System.out.println("shipmentId :" + shipmentId);
 		
 	}
 }
