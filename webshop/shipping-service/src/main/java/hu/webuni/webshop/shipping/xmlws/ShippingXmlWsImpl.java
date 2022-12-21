@@ -15,19 +15,22 @@ import org.springframework.stereotype.Service;
 import hu.webuni.webshop.shipping.dto.ShipmentOrderDto;
 import hu.webuni.webshop.shipping.dto.ShipmentOrderDto.ShipmentState;
 import hu.webuni.webshop.shipping.dto.ShipmentOrderItemDto;
-
+import hu.webuni.webshop.shipping.service.JmsService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ShippingXmlWsImpl implements ShippingXmlWs{
 	
+	private final JmsService jmsService;
+	
 	private Random random = new Random();
 	
 	@Override
 	@UseAsyncMethod
 	public int sendOrder(ShipmentOrderDto orderDto) {
-		System.out.println(orderDto.getId());
+		long orderId = orderDto.getId();
+		System.out.println(orderId);
 		System.out.println(orderDto.getUsername());
 		ArrayList<ShipmentOrderItemDto> items = orderDto.getItems();
 		items.forEach(i -> {
@@ -44,10 +47,10 @@ public class ShippingXmlWsImpl implements ShippingXmlWs{
 		}
 		
 		//Üzenet sorba üzenet (state,id)
+		jmsService.sendJmsMessage(orderId, state);
 		
 		
 		return longresponse(); //as shipmentId
-
 		
 	}
 
@@ -72,7 +75,8 @@ public class ShippingXmlWsImpl implements ShippingXmlWs{
 		ServerAsyncResponse<Integer> serverAsyncResponse = new ServerAsyncResponse<>();
 		System.out.println(Thread.currentThread().getName());
 		
-		System.out.println(orderDto.getId());
+		long ordeId = orderDto.getId();
+		System.out.println(ordeId);
 		System.out.println(orderDto.getUsername());
 		ArrayList<ShipmentOrderItemDto> items = orderDto.getItems();
 		items.forEach(i -> {
@@ -89,6 +93,10 @@ public class ShippingXmlWsImpl implements ShippingXmlWs{
 		}
 		
 		//üzenetküldés
+		
+		jmsService.sendJmsMessage(ordeId, state);
+		
+//		jmsTemplate.convertAndSend("shippingstatus");
 		
 		longresponseAsync().thenAccept(result -> {
 			System.out.println(Thread.currentThread().getName());
