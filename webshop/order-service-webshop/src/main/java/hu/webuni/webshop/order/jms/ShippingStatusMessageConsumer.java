@@ -1,5 +1,6 @@
 package hu.webuni.webshop.order.jms;
 
+
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
