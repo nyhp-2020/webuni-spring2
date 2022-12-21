@@ -56,9 +56,9 @@ public class OrderController {
 			orderService.setOrderDeclined(id);
 	}
 	
-	@GetMapping("/username")
-	public List<WsOrderDto> findByUsername(@RequestParam String username){
-		List<WsOrder> orders = orderService.findByUsernameIgnoreCase(username);
+	@GetMapping("/username/{username}")
+	public List<WsOrderDto> findByUsername(@PathVariable("username") String username){
+		List<WsOrder> orders = orderService.findByUsername(username);
 		return orderMapper.ordersToDtos(orders);
 	}
 	

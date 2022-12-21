@@ -68,8 +68,8 @@ public class OrderService {
 	}
 	
 	@Transactional
-	public List<WsOrder> findByUsernameIgnoreCase(String username){
-		return orderRepository.findAll();
+	public List<WsOrder> findByUsername(String username){
+		return orderRepository.findByUsername(username);
 	}
 	
 	@Transactional
