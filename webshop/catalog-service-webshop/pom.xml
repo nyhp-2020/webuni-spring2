@@ -109,6 +109,11 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.5.6</version>
 		</dependency>
+		<dependency>
+			<groupId>hu.webuni</groupId>
+			<artifactId>token-lib</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
