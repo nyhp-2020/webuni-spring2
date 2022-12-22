@@ -4,3 +4,9 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8085/eureka/
+hu:
+  webuni:
+    tokenlib:
+      keypaths:
+        private: /pem/private.pem       
+        public: /pem/public.pem

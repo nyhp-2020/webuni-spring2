@@ -9,9 +9,7 @@ import hu.webuni.webshop.user.repository.UserRepository;
 import hu.webuni.webshop.user.service.InitDbService;
 import lombok.RequiredArgsConstructor;
 
-
-//@SpringBootApplication
-//@ComponentScan ({"org.springframework.security.authentication"})
+//scanBasePackageClasses használata, ha más package-ből is használunk osztályokat.
 @RequiredArgsConstructor
 @SpringBootApplication(scanBasePackageClasses = {JwtAuthFilter.class, UserServiceWebshopApplication.class})
 public class UserServiceWebshopApplication implements CommandLineRunner{

@@ -57,7 +57,7 @@ public class OrderController {
 			orderService.setOrderDeclined(id);
 	}
 	
-	@PreAuthorize("#username == authentication.name")
+	@PreAuthorize("#username == authentication.username")
 	@GetMapping("/username/{username}")
 	public List<WsOrderDto> findByUsername(@PathVariable("username") String username){
 		List<WsOrder> orders = orderService.findByUsername(username);

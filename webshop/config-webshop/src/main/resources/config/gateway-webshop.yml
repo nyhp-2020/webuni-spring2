@@ -16,15 +16,15 @@ spring:
       - id: catalog-service-webshop
         uri: lb://catalog-service-webshop
         predicates:
-        - Path=/catalog-service-webshop/**
+        - Path=/catalog/**
         filters:
-        - RewritePath=/catalog-service-webshop(?<segment>/?.*), /api$\{segment}
+        - RewritePath=/catalog(?<segment>/?.*), /api$\{segment}
       - id: order-service-webshop
         uri: lb://order-service-webshop
         predicates:
-        - Path=/order-service-webshop/**
+        - Path=/order/**
         filters:
-        - RewritePath=/order-service-webshop(?<segment>/?.*), /api$\{segment}
+        - RewritePath=/order(?<segment>/?.*), /api$\{segment}
       - id: user-service-webshop
         uri: lb://users-service-webshop
         predicates:
