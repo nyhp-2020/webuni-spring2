@@ -4,6 +4,11 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8085/eureka/
+hu:
+  webuni:
+    tokenlib:
+      keypaths:
+        public: /pem/public.pem
 spring:
   cloud:
     gateway:
